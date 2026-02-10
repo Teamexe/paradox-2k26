@@ -10,9 +10,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
 
-  // ---------------------------------------------------
-  // 🎮 GAME LIST (Exactly 2 Games as requested)
-  // ---------------------------------------------------
+
   final List<Map<String, String>> festGames = [
     {
       "title": "Retro Space Invaders",
@@ -43,7 +41,7 @@ class _HomeScreenState extends State<HomeScreen> {
           children: [
 
 
-            // --- 1. HEADER SECTION ---
+            //HEADER SECTION
             Padding(
               padding: const EdgeInsets.all(20.0),
               child: Row(
@@ -83,20 +81,14 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
 
 
-
-
-
-
-
-
-            // --- 2. GAME CARDS LIST ---
+            // GAME CARDS LIST
             Expanded(
               child: ListView.builder(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 itemCount: festGames.length,
                 itemBuilder: (context, index) {
                   final game = festGames[index];
-                  // If "true", give it a special border and bigger size
+
                   final isFeatured = game["isFeatured"] == "true";
 
                   return Container(
@@ -122,14 +114,14 @@ class _HomeScreenState extends State<HomeScreen> {
                             BlendMode.darken
                         ),
                       ),
-                      // Cyan border for featured, subtle white for default
+
                       border: isFeatured
                           ? Border.all(color: colorScheme.primary, width: 2)
                           : Border.all(color: Colors.white10),
                     ),
                     child: Stack(
                       children: [
-                        // Gradient Overlay (Bottom to Top)
+
                         Container(
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(24),
@@ -190,7 +182,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                         ),
 
-                        // Play Button Icon (Visual Only)
+                        // Play Button Icon
                         Positioned(
                           bottom: 20,
                           right: 20,

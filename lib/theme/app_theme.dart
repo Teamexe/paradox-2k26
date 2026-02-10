@@ -20,32 +20,19 @@ class AppTheme {
   static const Color textGrey = Colors.white54;
 
 
-  // ---------------------------------------------------------------------------
-  // 2. THEME DATA (The "Instruction Manual" for Flutter)
-  // ---------------------------------------------------------------------------
-  // This function returns a 'ThemeData' object.
-  // When you pass this to 'MaterialApp' in main.dart, Flutter reads this
-  // manual to know how to style EVERY widget in your app automatically.
-  // ---------------------------------------------------------------------------
   static ThemeData get darkGamingTheme {
     return ThemeData(
-      // Enables the latest Material Design 3 features
+
       useMaterial3: true,
 
-      // Tells Flutter "We are in Dark Mode", so it should default to white text
       brightness: Brightness.dark,
 
-      // Sets the background color of every Scaffold (page) in the app
       scaffoldBackgroundColor: bgDark,
 
-      // -----------------------------------------------------------------------
-      // COLOR SCHEME
-      // This is the new standard way to define colors. Widgets look here first.
-      // -----------------------------------------------------------------------
       colorScheme: const ColorScheme.dark(
-        primary: accentCyan,   // Used for buttons, active states, etc.
-        surface: cardBlue,     // Used for Cards, BottomSheets, Dialogs
-        onSurface: textWhite,  // The color of text ON TOP of the surface
+        primary: accentCyan,
+        surface: cardBlue,
+        onSurface: textWhite,
       ),
 
 
@@ -55,14 +42,14 @@ class AppTheme {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(16),
         ),
-        elevation: 0, // Removes the shadow for a "flat" modern look
+        elevation: 0,
       ),
 
-     //appbar theme
+      //appbar theme
       appBarTheme: const AppBarTheme(
-        backgroundColor: Colors.transparent, // Makes it see-through
-        elevation: 0, // Removes the shadow drop
-        centerTitle: false, // Aligns title to the left (Android style)
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        centerTitle: false,
         titleTextStyle: TextStyle(
           color: textWhite,
           fontSize: 20,
