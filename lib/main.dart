@@ -4,6 +4,7 @@ import 'package:paradox/minigames/mine_scan_screen.dart';
 import 'package:paradox/minigames/multi_task_screen.dart';
 import 'package:paradox/minigames/node_decryption_screen.dart';
 import 'package:paradox/minigames/pathfinder_screen.dart';
+import 'package:paradox/commit_clash_app.dart';
 
 void main() {
   runApp(const MyApp());
