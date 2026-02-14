@@ -12,7 +12,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Paradox 2K26',
+      title: 'Pre-Paradox',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.darkGamingTheme,
       home: const SplashScreen(),
