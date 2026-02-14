@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:paradox/commit_clash_app.dart';
+import 'package:paradox/screen/splash_screen.dart';
+import 'package:paradox/theme/app_theme.dart';
 
 void main() {
   runApp(const MyApp());
@@ -11,13 +12,10 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Paradox',
+      title: 'Paradox 2K26',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF0D1117)),
-        useMaterial3: true,
-      ),
-      home: const CommitClashApp(), 
+      theme: AppTheme.darkGamingTheme,
+      home: const SplashScreen(),
     );
   }
 }

@@ -290,8 +290,10 @@ class _MineScanScreenState extends State<MineScanScreen> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          // Empty SizedBox to balance the layout
-          const SizedBox(width: 48),
+          IconButton(
+            icon: const Icon(Icons.arrow_back_ios_new, color: Colors.white70, size: 22),
+            onPressed: () => Navigator.pop(context),
+          ),
           Column(
             children: [
               Text(

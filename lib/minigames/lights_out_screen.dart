@@ -153,19 +153,33 @@ class _LightsOutScreenState extends State<LightsOutScreen> {
   }
 
   Widget _buildHeader() {
-    return Column(
-      children: [
-        Text(
-          "LIGHTS OUT ${widget.isLevelMode ? '(Level 2)' : ''}",
-          style: const TextStyle(
-            color: Color(0xFFBC13FE),
-            fontSize: 28,
-            fontWeight: FontWeight.bold,
-            shadows: [Shadow(color: Color(0xFFBC13FE), blurRadius: 10)],
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8),
+      child: Row(
+        children: [
+          IconButton(
+            icon: const Icon(Icons.arrow_back_ios_new, color: Colors.white70, size: 22),
+            onPressed: () => Navigator.pop(context),
           ),
-        ),
-        const Text("Turn all lights OFF", style: TextStyle(color: Colors.grey)),
-      ],
+          Expanded(
+            child: Column(
+              children: [
+                Text(
+                  "LIGHTS OUT ${widget.isLevelMode ? '(Level 2)' : ''}",
+                  style: const TextStyle(
+                    color: Color(0xFFBC13FE),
+                    fontSize: 28,
+                    fontWeight: FontWeight.bold,
+                    shadows: [Shadow(color: Color(0xFFBC13FE), blurRadius: 10)],
+                  ),
+                ),
+                const Text("Turn all lights OFF", style: TextStyle(color: Colors.grey)),
+              ],
+            ),
+          ),
+          const SizedBox(width: 48),
+        ],
+      ),
     );
   }
 

@@ -224,28 +224,39 @@ class _PathfinderScreenState extends State<PathfinderScreen> {
 
   Widget _buildHeader() {
     return Padding(
-      padding: const EdgeInsets.all(20),
-      child: Column(
+      padding: const EdgeInsets.fromLTRB(8, 20, 8, 0),
+      child: Row(
         children: [
-          Text(
-            "PATH MAPPER ${widget.isLevelMode ? '(Level 6)' : ''}",
-            style: const TextStyle(
-              color: Colors.white,
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-              letterSpacing: 2,
+          IconButton(
+            icon: const Icon(Icons.arrow_back_ios_new, color: Colors.white70, size: 22),
+            onPressed: () => Navigator.pop(context),
+          ),
+          Expanded(
+            child: Column(
+              children: [
+                Text(
+                  "PATH MAPPER ${widget.isLevelMode ? '(Level 6)' : ''}",
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                    letterSpacing: 2,
+                  ),
+                ),
+                Text(
+                  isMemorizing ? "MEMORIZING FREQUENCY..." : "REPLICATE SIGNAL",
+                  style: TextStyle(
+                    color: isMemorizing
+                        ? const Color(0xFFBC13FE)
+                        : const Color(0xFF00F3FF),
+                    fontSize: 12,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
             ),
           ),
-          Text(
-            isMemorizing ? "MEMORIZING FREQUENCY..." : "REPLICATE SIGNAL",
-            style: TextStyle(
-              color: isMemorizing
-                  ? const Color(0xFFBC13FE)
-                  : const Color(0xFF00F3FF),
-              fontSize: 12,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
+          const SizedBox(width: 48),
         ],
       ),
     );

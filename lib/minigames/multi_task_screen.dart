@@ -270,8 +270,10 @@ class _CoreBreachScreenState extends State<CoreBreachScreen>
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          // Balance spacer
-          const SizedBox(width: 48),
+          IconButton(
+            icon: const Icon(Icons.arrow_back_ios_new, color: Colors.white70, size: 22),
+            onPressed: () => Navigator.pop(context),
+          ),
           Column(
             children: [
               const Text(
@@ -374,55 +376,59 @@ class _CoreBreachScreenState extends State<CoreBreachScreen>
   }
 
   Widget _buildCenterCore() {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        const Text(
-          "OVERRIDE CODE",
-          style: TextStyle(color: Colors.white54, fontSize: 10),
-        ),
-        const SizedBox(height: 10),
-        Container(
-          padding: const EdgeInsets.all(20),
-          decoration: BoxDecoration(
-            color: Colors.black,
-            border: Border.all(color: Colors.purpleAccent, width: 2),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.purpleAccent.withOpacity(0.3),
-                blurRadius: 20,
-              ),
-            ],
+    return FittedBox(
+      fit: BoxFit.scaleDown,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          const Text(
+            "OVERRIDE CODE",
+            style: TextStyle(color: Colors.white54, fontSize: 10),
           ),
-          child: Text(
-            targetCode,
-            style: const TextStyle(
-              color: Colors.white,
-              fontSize: 42,
-              fontWeight: FontWeight.bold,
-              letterSpacing: 8,
-              fontFamily: 'monospace',
+          const SizedBox(height: 10),
+          Container(
+            padding: const EdgeInsets.all(20),
+            decoration: BoxDecoration(
+              color: Colors.black,
+              border: Border.all(color: Colors.purpleAccent, width: 2),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.purpleAccent.withOpacity(0.3),
+                  blurRadius: 20,
+                ),
+              ],
+            ),
+            child: Text(
+              targetCode,
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 42,
+                fontWeight: FontWeight.bold,
+                letterSpacing: 8,
+                fontFamily: 'monospace',
+              ),
             ),
           ),
-        ),
-        const SizedBox(height: 20),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: List.generate(4, (index) {
-            bool filled = userEntry.length > index;
-            return Container(
-              width: 15,
-              height: 15,
-              margin: const EdgeInsets.all(5),
-              decoration: BoxDecoration(
-                color: filled ? Colors.purpleAccent : Colors.transparent,
-                border: Border.all(color: Colors.purpleAccent),
-                shape: BoxShape.circle,
-              ),
-            );
-          }),
-        ),
-      ],
+          const SizedBox(height: 20),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: List.generate(4, (index) {
+              bool filled = userEntry.length > index;
+              return Container(
+                width: 15,
+                height: 15,
+                margin: const EdgeInsets.all(5),
+                decoration: BoxDecoration(
+                  color: filled ? Colors.purpleAccent : Colors.transparent,
+                  border: Border.all(color: Colors.purpleAccent),
+                  shape: BoxShape.circle,
+                ),
+              );
+            }),
+          ),
+        ],
+      ),
     );
   }
 

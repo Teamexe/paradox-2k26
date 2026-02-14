@@ -89,7 +89,14 @@ class _MainMenuScreenState extends State<MainMenuScreen> with TickerProviderStat
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              const SizedBox(height: 30),
+              Align(
+                alignment: Alignment.centerLeft,
+                child: IconButton(
+                  icon: const Icon(Icons.arrow_back_ios_new, color: Color(0xFF8B949E), size: 22),
+                  onPressed: () => Navigator.pop(context),
+                ),
+              ),
+              const SizedBox(height: 10),
               _buildMiniGrid(),
               const SizedBox(height: 32),
               const Text(

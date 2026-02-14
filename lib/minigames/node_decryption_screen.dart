@@ -150,9 +150,7 @@ class _NodeDecryptionScreenState extends State<NodeDecryptionScreen> {
                 const SizedBox(height: 20),
                 _buildHeader(),
                 _buildProgressBar(),
-                const Spacer(),
-                _buildGrid(),
-                const Spacer(),
+                Expanded(child: Center(child: _buildGrid())),
                 _buildStatusText(),
                 const SizedBox(height: 40),
               ],
@@ -165,22 +163,36 @@ class _NodeDecryptionScreenState extends State<NodeDecryptionScreen> {
   }
 
   Widget _buildHeader() {
-    return Column(
-      children: [
-        const Text(
-          "NODE DECRYPTION",
-          style: TextStyle(
-            color: Color(0xFF39FF14),
-            fontSize: 26,
-            fontWeight: FontWeight.bold,
-            letterSpacing: 4,
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8),
+      child: Row(
+        children: [
+          IconButton(
+            icon: const Icon(Icons.arrow_back_ios_new, color: Colors.white70, size: 22),
+            onPressed: () => Navigator.pop(context),
           ),
-        ),
-        Text(
-          "TRANSMISSION SPEED: ${110 - (currentLevel * 10)}%",
-          style: const TextStyle(color: Colors.white38, fontSize: 10),
-        ),
-      ],
+          Expanded(
+            child: Column(
+              children: [
+                const Text(
+                  "NODE DECRYPTION",
+                  style: TextStyle(
+                    color: Color(0xFF39FF14),
+                    fontSize: 26,
+                    fontWeight: FontWeight.bold,
+                    letterSpacing: 4,
+                  ),
+                ),
+                Text(
+                  "TRANSMISSION SPEED: ${110 - (currentLevel * 10)}%",
+                  style: const TextStyle(color: Colors.white38, fontSize: 10),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(width: 48),
+        ],
+      ),
     );
   }
 
