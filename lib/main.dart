@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'screens/homescreen.dart';
+import 'package:paradox/screen/LoginScreen.dart';
+import 'package:paradox/screen/SignupScreen.dart';
+import 'screen/HomeScreen.dart';
 import 'theme/app_theme.dart';
 
 void main() {
@@ -18,7 +20,7 @@ class MyApp extends StatelessWidget {
 
       // customised theme  taken from the app_theme.dart
       theme: AppTheme.darkGamingTheme,
-      home: const HomeScreen(),
+      home: const LoginScreen(),
     );
   }
 }
