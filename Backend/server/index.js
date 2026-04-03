@@ -1,3 +1,11 @@
+// Polyfill: SlowBuffer was removed in Node.js v25+
+const _buffer = require('buffer');
+if (!_buffer.SlowBuffer) {
+  _buffer.SlowBuffer = {
+    prototype: Buffer.prototype,
+  };
+}
+
 const dotenv = require('dotenv');
 dotenv.config();
 const passport=require('passport')
