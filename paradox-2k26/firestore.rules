@@ -1,0 +1,26 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Allow anonymous authentication
+    match /{document=**} {
+      allow read, write: if request.auth != null;
+    }
+    
+    // Refined rules:
+    
+    // Waiting Room
+    match /waiting_room/queue {
+      allow read, write: if request.auth != null;
+      // In production, validate that user only adds/removes themselves
+    }
+    
+    // Matches
+    match /matches/{matchId} {
+      allow read: if request.auth != null && 
+                  (request.auth.uid in resource.data.players || resource == null);
+      allow create: if request.auth != null; // Matchmaking service creates
+      allow update: if request.auth != null && 
+                    request.auth.uid in resource.data.players;
+    }
+  }
+}
