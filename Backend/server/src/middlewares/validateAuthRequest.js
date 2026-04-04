@@ -1,60 +1,110 @@
 const { StatusCodes } = require('http-status-codes');
-const { ErrorResponse } = require('../utils/common');
-const AppError = require('../utils/errors/appError');
-const  {AuthService}  = require('../services');
+const { AuthService } = require('../services');
 
-function validateAuthRequest(req, res, next) {
-    if(!req.body.email) {
-        ErrorResponse.message = 'Something went wrong while authenticating user';
-        ErrorResponse.error = new AppError(['Email was not found in the incoming request in the correct form'], StatusCodes.BAD_REQUEST);
-        return res.status(StatusCodes.BAD_REQUEST).json(ErrorResponse);
+function buildErrorResponse(message, error) {
+    return {
+        success: false,
+        message,
+        data: {},
+        error
+    };
+}
+
+function normalizeEmail(email) {
+    return typeof email === 'string' ? email.trim().toLowerCase() : '';
+}
+
+function validateEmail(email) {
+    const normalizedEmail = normalizeEmail(email);
+
+    if (!normalizedEmail) {
+        return 'Email is required';
     }
-    if(!req.body.email.endsWith('@nith.ac.in') ){
-        ErrorResponse.message = 'Something went wrong while authenticating user';
-        ErrorResponse.error=new AppError(['Please enter a valid NIT Hamirpur email'],StatusCodes.BAD_REQUEST);
-        return res.status(StatusCodes.BAD_REQUEST).json(ErrorResponse);
+
+    if (!normalizedEmail.endsWith('@nith.ac.in')) {
+        return 'Please enter a valid NIT Hamirpur email';
     }
-    if(!req.body.password) {
-        ErrorResponse.message = 'Something went wrong while authenticating user';
-        ErrorResponse.error = new AppError(['password was not found in the incoming request in the correct form'], StatusCodes.BAD_REQUEST);
-        return res.status(StatusCodes.BAD_REQUEST).json(ErrorResponse);
+
+    return null;
+}
+
+function validateOtpRequest(req, res, next) {
+    const emailError = validateEmail(req.body.email);
+
+    if (emailError) {
+        return res.status(StatusCodes.BAD_REQUEST).json(buildErrorResponse(emailError, emailError));
     }
+
+    req.body.email = normalizeEmail(req.body.email);
     next();
 }
 
+function validateSignInRequest(req, res, next) {
+    const emailError = validateEmail(req.body.email);
 
+    if (emailError) {
+        return res.status(StatusCodes.BAD_REQUEST).json(buildErrorResponse(emailError, emailError));
+    }
 
+    if (!req.body.password || typeof req.body.password !== 'string') {
+        return res.status(StatusCodes.BAD_REQUEST).json(buildErrorResponse('Password is required', 'Password is required'));
+    }
 
-async function checkAuth(req,res,next){
-    try{
-        const authHeader = req.headers.authorization; // Fetch the Authorization header
-        // console.log(authHeader)
-        if (!authHeader) {
-            throw new Error('No Authorization header provided');
+    req.body.email = normalizeEmail(req.body.email);
+    next();
+}
+
+function validateSignUpRequest(req, res, next) {
+    const emailError = validateEmail(req.body.email);
+
+    if (emailError) {
+        return res.status(StatusCodes.BAD_REQUEST).json(buildErrorResponse(emailError, emailError));
+    }
+
+    if (!req.body.name || typeof req.body.name !== 'string' || !req.body.name.trim()) {
+        return res.status(StatusCodes.BAD_REQUEST).json(buildErrorResponse('Name is required', 'Name is required'));
+    }
+
+    if (!req.body.password || typeof req.body.password !== 'string') {
+        return res.status(StatusCodes.BAD_REQUEST).json(buildErrorResponse('Password is required', 'Password is required'));
+    }
+
+    if (!req.body.otp || typeof req.body.otp !== 'string') {
+        return res.status(StatusCodes.BAD_REQUEST).json(buildErrorResponse('OTP is required', 'OTP is required'));
+    }
+
+    req.body.email = normalizeEmail(req.body.email);
+    req.body.name = req.body.name.trim();
+    req.body.otp = req.body.otp.trim();
+    next();
+}
+
+async function checkAuth(req, res, next) {
+    try {
+        const authHeader = req.headers.authorization;
+
+        if (!authHeader || !authHeader.startsWith('Bearer ')) {
+            return res.status(StatusCodes.UNAUTHORIZED).json(
+                buildErrorResponse('Authorization token is required', 'Authorization token is required')
+            );
         }
-        const token = authHeader.split(' ')[1]; // Extract the token part after 'Bearer'
-        if (!token) {
-            throw new Error('Malformed Authorization header');
-        }
-        const response= await AuthService.isAuthentication(token);
-        console.log("the response will be in auth....",response) 
-        if(response){
-            req.user=response;
-            // console.log(response)
-            next()
-        }
-   }
-    catch(error){
-        console.log(error)
-        return res
-        .status(StatusCodes.UNAUTHORIZED)
-        .json(error);
+
+        const token = authHeader.split(' ')[1];
+        const user = await AuthService.isAuthentication(token);
+
+        req.user = user;
+        next();
+    } catch (error) {
+        console.log(error);
+        return res.status(StatusCodes.UNAUTHORIZED).json(
+            buildErrorResponse(error.message || 'Invalid token', error.message || 'Invalid token')
+        );
     }
 }
 
-
-
-  
-
-module.exports=  { validateAuthRequest, checkAuth}
-
+module.exports = {
+    validateOtpRequest,
+    validateSignInRequest,
+    validateSignUpRequest,
+    checkAuth
+};

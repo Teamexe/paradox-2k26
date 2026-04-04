@@ -7,42 +7,73 @@ const bcrypt = require('bcryptjs');
 
 const authRepo=new AuthRepository();
 
+function normalizeEmail(email) {
+    return email.trim().toLowerCase();
+}
+
+function serializeUser(user) {
+    if (!user) {
+        return null;
+    }
+
+    const serializedUser = typeof user.toObject === 'function' ? user.toObject() : { ...user };
+    delete serializedUser.password;
+    return serializedUser;
+}
+
 async function createUser(data) {
     try {
-        email=data.email;
+        const email = normalizeEmail(data.email);
         const existingUser = await authRepo.findUserByEmail(email);
         if (existingUser) {
             throw new AppError("User already exists", StatusCodes.BAD_REQUEST);
         }
-        console.log('Exist',existingUser);
-        const user =await authRepo.create(data);
-        const token=await generateToken(user);
+
+        const user = await authRepo.create({
+            ...data,
+            email
+        });
+        const token = await generateToken(user);
         if(!token){
-            throw new AppError("Token not generated", StatusCodes.INTERNAL_SERVER);
+            throw new AppError("Token not generated", StatusCodes.INTERNAL_SERVER_ERROR);
         }
-        const User={user,token};
-        return User;
+
+        return {
+            user: serializeUser(user),
+            token
+        };
     } catch (err) {
         throw err;
     }
 }
+
 async function signIn(data) {
     try {
-        email=data.email;
-        // console.log(email);
+        const email = normalizeEmail(data.email);
         const user = await authRepo.findUserByEmail(email);
-        console.log(user);
         if (!user) {
-            throw new AppError("Invalid email", StatusCodes.BAD_REQUEST);
+            throw new AppError("Invalid credentials", StatusCodes.BAD_REQUEST);
         }
+
         const isMatch = await comparePassword(data.password, user.password);
-        // console.log("hgfh",data.password);
-        // console.log("hgfh",isMatch);
         if (!isMatch) {
-            throw new AppError("Invalid password", StatusCodes.BAD_REQUEST);
+            throw new AppError("Invalid credentials", StatusCodes.BAD_REQUEST);
         }
-        return user;
+
+        if (!user.verified) {
+            throw new AppError("Please verify your email before signing in", StatusCodes.FORBIDDEN);
+        }
+
+        const token = await generateToken(user);
+        return {
+            user: serializeUser(user),
+            token
+        };
     } catch (error) {
+        if (error instanceof AppError) {
+            throw error;
+        }
+
         throw new AppError("Invalid credentials", StatusCodes.BAD_REQUEST);
     }
 }
@@ -101,9 +132,10 @@ async function comparePassword(plainPassword, hashedPassword) {
 async function isAuthentication(token) {
     try {
         const decoded = jwt.verify(token, serverConfig.JWT_SECRET_KEY);
-        console.log(decoded);
-        
         const user = await authRepo.findUserById(decoded.id);
+        if (!user) {
+            throw new AppError("User not found", StatusCodes.UNAUTHORIZED);
+        }
         return user;
     } catch (err) {
         throw new AppError("Invalid token", StatusCodes.UNAUTHORIZED);
@@ -118,5 +150,6 @@ module.exports={
     signIn,
     findUserById,
     findOrCreateUser,
-    isAuthentication
+    isAuthentication,
+    serializeUser
 }

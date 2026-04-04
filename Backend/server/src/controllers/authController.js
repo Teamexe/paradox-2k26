@@ -1,8 +1,10 @@
-const {SuccessResponse,ErrorResponse}=require('../utils/common')
 const { StatusCodes } = require("http-status-codes");
 const { AuthService } = require("../services");
 const {OTP}=require('../models');
-const otp = require('../models/otp');
+
+function buildResponse(success, message, data = {}, error = {}) {
+    return { success, message, data, error };
+}
 
 async function signUp(req, res) {
     try {
@@ -12,46 +14,27 @@ async function signUp(req, res) {
             password: req.body.password,
         };
         const { otp } = req.body;
-        
-        if (!data.name || !data.email || !data.password || !otp) {
-            return res.status(StatusCodes.BAD_REQUEST).json({
-                message: "Please enter all the fields",
-                statusCode: StatusCodes.BAD_REQUEST
-            });
+
+        const latestOtp = await OTP.findOne({ email: data.email }).sort({ createdAt: -1 });
+
+        if (!latestOtp || otp !== latestOtp.otp.toString()) {
+            return res.status(StatusCodes.BAD_REQUEST).json(
+                buildResponse(false, 'The OTP is not valid or has expired', {}, 'Invalid OTP')
+            );
         }
 
-        const responseOtp = await OTP.find({ email: data.email })
-                                   .sort({ createdAt: -1 })
-                                   .limit(1);
-
-        console.log("responseOtp", responseOtp);
-        
-        if (responseOtp.length === 0 || otp !== responseOtp[0].otp.toString()) {
-            return res.status(StatusCodes.BAD_REQUEST).json({
-                message: "The OTP is not valid", 
-                statusCode: StatusCodes.BAD_REQUEST
-            });
-        }
-
-        console.log("email", data.email, "otp", otp);
-        
         data.verified = true;
-        const user = await AuthService.createUser(data);
-        OTP.deleteMany({email:email}).then((result)=>console.log(result));
+        const authPayload = await AuthService.createUser(data);
+        await OTP.deleteMany({ email: data.email });
 
-        
-        return res.status(StatusCodes.OK).json({
-            data: user,
-            message: "User registered successfully",
-            statusCode: StatusCodes.OK
-        });
-        
+        return res.status(StatusCodes.CREATED).json(
+            buildResponse(true, 'User registered successfully', authPayload, {})
+        );
     } catch (err) {
         console.log(err);
-        return res.status(StatusCodes.BAD_REQUEST).json({
-            error: err.message,
-            statusCode: StatusCodes.BAD_REQUEST
-        });
+        return res.status(err.statusCode || StatusCodes.BAD_REQUEST).json(
+            buildResponse(false, err.message || 'Unable to register user', {}, err.message)
+        );
     }
 }
 
@@ -61,19 +44,15 @@ async function signIn(req,res) {
             email:req.body.email,
             password:req.body.password
         }
-        const user=await AuthService.signIn(data);
-        if(user){
-            const token=await AuthService.generateToken(user);
-            SuccessResponse.data={user,token};
-            SuccessResponse.message="User logged in successfully";
-            return res.status(StatusCodes.OK).json(SuccessResponse);
-        }
-        ErrorResponse.message="Invalid credentials";
-        return res.status(StatusCodes.BAD_REQUEST).json(ErrorResponse);
+        const authPayload = await AuthService.signIn(data);
+        return res.status(StatusCodes.OK).json(
+            buildResponse(true, 'User logged in successfully', authPayload, {})
+        );
     } catch (error) {
         console.log(error);
-        ErrorResponse.error=error;
-        return res.status(StatusCodes.BAD_REQUEST).json(ErrorResponse);
+        return res.status(error.statusCode || StatusCodes.BAD_REQUEST).json(
+            buildResponse(false, error.message || 'Invalid credentials', {}, error.message)
+        );
     }
 }
 
@@ -82,16 +61,18 @@ async function checkAuth(req,res) {
     try {
         const user=req.user;
         if(user){
-            SuccessResponse.data=user;
-            SuccessResponse.message="User authenticated successfully";
-            return res.status(StatusCodes.OK).json(SuccessResponse);
+            return res.status(StatusCodes.OK).json(
+                buildResponse(true, 'User authenticated successfully', { user: AuthService.serializeUser(user) }, {})
+            );
         }
-        ErrorResponse.message="User not found";
-        return res.status(StatusCodes.BAD_REQUEST).json(ErrorResponse);
+        return res.status(StatusCodes.BAD_REQUEST).json(
+            buildResponse(false, 'User not found', {}, 'User not found')
+        );
     } catch (error) {
         console.log(error);
-        ErrorResponse.error=error;
-        return res.status(StatusCodes.BAD_REQUEST).json(ErrorResponse);
+        return res.status(StatusCodes.BAD_REQUEST).json(
+            buildResponse(false, 'Authentication check failed', {}, error.message)
+        );
     }
 }
 

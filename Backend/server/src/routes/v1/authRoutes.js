@@ -5,9 +5,9 @@ const {otpController}=require('../../controllers');
 const router=express.Router();
 
 
-router.post('/signup',ValidateAuthReq.validateAuthRequest,AuthController.signUp);
-router.post('/signup/send-otp',ValidateAuthReq.validateAuthRequest,otpController.sendOTP);
-router.post('/signIn',ValidateAuthReq.validateAuthRequest,AuthController.signIn);
+router.post('/signup',ValidateAuthReq.validateSignUpRequest,AuthController.signUp);
+router.post('/signup/send-otp',ValidateAuthReq.validateOtpRequest,otpController.sendOTP);
+router.post('/signIn',ValidateAuthReq.validateSignInRequest,AuthController.signIn);
 router.post('/check',ValidateAuthReq.checkAuth,AuthController.checkAuth);
 
 
