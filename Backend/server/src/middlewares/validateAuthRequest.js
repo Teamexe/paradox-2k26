@@ -83,13 +83,22 @@ async function checkAuth(req, res, next) {
     try {
         const authHeader = req.headers.authorization;
 
-        if (!authHeader || !authHeader.startsWith('Bearer ')) {
+        if (!authHeader) {
             return res.status(StatusCodes.UNAUTHORIZED).json(
                 buildErrorResponse('Authorization token is required', 'Authorization token is required')
             );
         }
 
-        const token = authHeader.split(' ')[1];
+        const token = authHeader.startsWith('Bearer ')
+            ? authHeader.split(' ')[1]
+            : authHeader.trim();
+
+        if (!token) {
+            return res.status(StatusCodes.UNAUTHORIZED).json(
+                buildErrorResponse('Authorization token is required', 'Authorization token is required')
+            );
+        }
+
         const user = await AuthService.isAuthentication(token);
 
         req.user = user;
