@@ -78,9 +78,10 @@ async function currentQues(user) {
             return response;
         }
         const ques=await quesRepo.getAll(query);
+        if (!Array.isArray(ques) || ques.length === 0) {
+            throw new AppError("Current question not found", StatusCodes.NOT_FOUND);
+        }
         console.log("Current Quest:",ques);
-        ques.hint=undefined;
-        ques.answer=undefined;
         const hintUsed = Array.isArray(user.hintUsed) ? user.hintUsed.length : 0;
         ques[0].hint=undefined;
         ques[0].answer=undefined;
@@ -102,6 +103,9 @@ async function hint(user) {
     try {
         const query={ lvl: user.currLvl, id: user.currQues };
         const response=await quesRepo.getAll(query);
+        if (!Array.isArray(response) || response.length === 0) {
+            throw new AppError("Current question not found", StatusCodes.NOT_FOUND);
+        }
         console.log("Current Quest hint:",response);
         const hintUsed=await AuthRepo.addHintUsed(user._id,response[0]._id);
         console.log(hintUsed);
