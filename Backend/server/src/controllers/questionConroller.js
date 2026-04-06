@@ -134,13 +134,16 @@ async function deleteQues(req,res) {
 
 async function updateQues(req,res) {
     try {
+        const formattedAnswer = typeof req.body?.answer === 'string'
+            ? req.body.answer.toLowerCase().trim()
+            : req.body?.answer;
         const id=req.params.id;
         const data={
             lvl:req.body?.lvl,
             title:req.body?.title,
             descriptionOrImgUrl:req.body?.descriptionOrImgUrl,
             hint:req.body?.hint,
-            answer:req.body?.answer
+            answer:formattedAnswer
         }
         console.log("data:",data);
         const reponse=await QuestionService.updateQues(id,data);
