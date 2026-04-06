@@ -13,7 +13,9 @@ async function checkAdmin(req,res,next){
         if (!authHeader) {
             throw new AppError('No token provided', StatusCodes.UNAUTHORIZED);
         }
-        const token = authHeader.split(' ')[1]; // Extract the token part after 'Bearer'
+        const token = authHeader.startsWith('Bearer ')
+            ? authHeader.split(' ')[1]
+            : authHeader.trim();
         console.log(token)
         if (!token) {
             throw new AppError('No token provided', StatusCodes.UNAUTHORIZED);
@@ -39,4 +41,3 @@ async function checkAdmin(req,res,next){
   
 
 module.exports=  {checkAdmin}
-
