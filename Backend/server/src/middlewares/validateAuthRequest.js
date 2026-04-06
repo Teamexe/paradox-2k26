@@ -20,8 +20,7 @@ function validateEmail(email) {
     if (!normalizedEmail) {
         return 'Email is required';
     }
-
-    if (!normalizedEmail.endsWith('@nith.ac.in')) {
+    if (!normalizedEmail.endsWith('@nith.ac.in') && !normalizedEmail.endsWith('@gmail.com')) {
         return 'Please enter a valid NIT Hamirpur email';
     }
 
