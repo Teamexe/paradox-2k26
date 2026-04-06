@@ -9,17 +9,33 @@ router.get("/leaderboard-stream", async (req, res) => {
 
     const sendLeaderboard = async () => {
         try {
-            const leaderboard = await User.find().sort({ score: -1 , updatedAt:1}).limit(100);
-            
+            const leaderboard = await User.find().limit(100);
+
             const response = leaderboard.map(user => {
                 const hintUsed = Array.isArray(user.hintUsed) ? user.hintUsed.length : 0;
                 return {
                     name: user.name,
-                    score: user.score - (hintUsed * 10)                          
+                    score: user.score - (hintUsed * 10),
+                    updatedAt: user.updatedAt
                 };
-            });    
-            response.sort((a, b) => b.score - a.score);
-            res.write(`data: ${JSON.stringify(response)}\n\n`);
+            });
+
+            response.sort((a, b) => {
+                if (b.score !== a.score) {
+                    return b.score - a.score;
+                }
+
+                const aTime = new Date(a.updatedAt).getTime();
+                const bTime = new Date(b.updatedAt).getTime();
+                if (aTime !== bTime) {
+                    return aTime - bTime;
+                }
+
+                return a.name.localeCompare(b.name);
+            });
+
+            const payload = response.map(({ updatedAt, ...rest }) => rest);
+            res.write(`data: ${JSON.stringify(payload)}\n\n`);
         } catch (error) {
             console.error('Error fetching leaderboard:', error);
             res.write('data: {"error": "Failed to fetch leaderboard"}\n\n');

@@ -41,17 +41,21 @@ class AuthRepository extends crudRepository {
                 {
                     $addFields: {
                         hintUsedLength: { $size: { $ifNull: ["$hintUsed", []] } },
-                        effectiveScore: { $subtract: ["$score", { $size: { $ifNull: ["$hintUsed", []] } }] }
+                        effectiveScore: {
+                            $subtract: [
+                                "$score",
+                                { $multiply: [{ $size: { $ifNull: ["$hintUsed", []] } }, 10] }
+                            ]
+                        }
                     }
                 },
                 { $sort: { effectiveScore: -1 } },
                 { $limit: TopNumUser },
                 { $project: { _id: 1 } }
-            ]).toArray();
+            ]);
 
             const topUserIds = topUsers.map(user => user._id);
 
-            // Update those top 50 users
             const result = await User.updateMany(
                 { _id: { $in: topUserIds } },
                 {
@@ -63,6 +67,13 @@ class AuthRepository extends crudRepository {
             );
 
             console.log(`Updated ${result.modifiedCount} users.`);
+            return {
+                matchedCount: result.matchedCount,
+                modifiedCount: result.modifiedCount,
+                currQues: Ques,
+                currLvl: Lvl,
+                topUserIds
+            };
         }
         catch (error) {
             console.error('Error:', error);
