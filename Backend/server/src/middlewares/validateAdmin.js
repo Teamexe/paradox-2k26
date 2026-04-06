@@ -3,6 +3,14 @@ const { ErrorResponse } = require('../utils/common');
 const AppError = require('../utils/errors/appError');
 const  {AdminService}  = require('../services');
 
+function buildErrorResponse(message, error) {
+    return {
+        success: false,
+        message,
+        data: {},
+        error
+    };
+}
 
 
 
@@ -30,9 +38,9 @@ async function checkAdmin(req,res,next){
    }
     catch(error){
         console.log(error)
-        ErrorResponse.message="You are not authorized to access this resource";
-        ErrorResponse.error=error
-        return res.status(StatusCodes.UNAUTHORIZED).json(ErrorResponse);
+        return res.status(StatusCodes.UNAUTHORIZED).json(
+            buildErrorResponse("You are not authorized to access this resource", error.message || error)
+        );
     }
 }
 

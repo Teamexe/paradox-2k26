@@ -20,7 +20,7 @@ function validateEmail(email) {
     if (!normalizedEmail) {
         return 'Email is required';
     }
-    if (!normalizedEmail.endsWith('@nith.ac.in') && !normalizedEmail.endsWith('@gmail.com')) {
+    if (!normalizedEmail.endsWith('@nith.ac.in')) {
         return 'Please enter a valid NIT Hamirpur email';
     }
 
@@ -50,6 +50,7 @@ function validateSignInRequest(req, res, next) {
     }
 
     req.body.email = normalizeEmail(req.body.email);
+    req.body.password = req.body.password.trim();
     next();
 }
 
@@ -68,12 +69,17 @@ function validateSignUpRequest(req, res, next) {
         return res.status(StatusCodes.BAD_REQUEST).json(buildErrorResponse('Password is required', 'Password is required'));
     }
 
+    if (req.body.password.trim().length < 8) {
+        return res.status(StatusCodes.BAD_REQUEST).json(buildErrorResponse('Password must be at least 8 characters long', 'Password must be at least 8 characters long'));
+    }
+
     if (!req.body.otp || typeof req.body.otp !== 'string') {
         return res.status(StatusCodes.BAD_REQUEST).json(buildErrorResponse('OTP is required', 'OTP is required'));
     }
 
     req.body.email = normalizeEmail(req.body.email);
     req.body.name = req.body.name.trim();
+    req.body.password = req.body.password.trim();
     req.body.otp = req.body.otp.trim();
     next();
 }
