@@ -4,7 +4,7 @@ module.exports = {
     JWT_SECRET_KEY: process.env.JWT_SECRET_KEY,
     JWT_EXPIRE: process.env.JWT_EXPIRE, 
     EXPIRES_IN: process.env.EXPIRES_IN,
-    ADMIN_EMAIL:process.env.ADMIN_EMAIL || 'themritunjai@gmail.com',
-    ADMIN_EMAIL_PASSWORD:process.env.ADMIN_EMAIL_PASSWORD || 'lexpylnjfpgocxqn',
+    ADMIN_EMAIL: process.env.ADMIN_EMAIL,
+    ADMIN_EMAIL_PASSWORD: process.env.ADMIN_EMAIL_PASSWORD,
     SCORE:process.env.SCORE
 };
