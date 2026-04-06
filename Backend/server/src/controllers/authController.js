@@ -65,12 +65,12 @@ async function checkAuth(req,res) {
                 buildResponse(true, 'User authenticated successfully', { user: AuthService.serializeUser(user) }, {})
             );
         }
-        return res.status(StatusCodes.BAD_REQUEST).json(
+        return res.status(StatusCodes.UNAUTHORIZED).json(
             buildResponse(false, 'User not found', {}, 'User not found')
         );
     } catch (error) {
         console.log(error);
-        return res.status(StatusCodes.BAD_REQUEST).json(
+        return res.status(StatusCodes.UNAUTHORIZED).json(
             buildResponse(false, 'Authentication check failed', {}, error.message)
         );
     }

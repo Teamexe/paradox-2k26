@@ -19,8 +19,8 @@ function serializeAdmin(user) {
 async function signIn(req,res) {
     try {
         const data={
-            name:req.body.name,
-            password:req.body.password
+            name: typeof req.body.name === 'string' ? req.body.name.trim() : req.body.name,
+            password: typeof req.body.password === 'string' ? req.body.password.trim() : req.body.password
         }
         const user=await AdminService.signIn(data);
         if(user){
@@ -42,10 +42,20 @@ async function signIn(req,res) {
 
 async function changeLevel(req,res) {
     try {
+        const currQues = Number(req.body.currQues);
+        const currLvl = Number(req.body.currLvl);
+        const topNumUser = Number(req.body.TopNumUser);
+
+        if (!Number.isInteger(currQues) || !Number.isInteger(currLvl) || !Number.isInteger(topNumUser) || currQues < 0 || currLvl < 1 || topNumUser < 1) {
+            return res.status(StatusCodes.BAD_REQUEST).json(
+                buildResponse(false, "currQues, currLvl and TopNumUser must be valid positive numbers", {}, "Invalid change level payload")
+            );
+        }
+
         const data={
-            Ques:req.body.currQues,
-            Lvl:req.body.currLvl,
-            TopNumUser:req.body.TopNumUser
+            Ques: currQues,
+            Lvl: currLvl,
+            TopNumUser: topNumUser
         };
         const user=await AdminService.changeLevel(data);
         if(user){
