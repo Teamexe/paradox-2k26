@@ -2,6 +2,19 @@ const {SuccessResponse,ErrorResponse}=require('../utils/common')
 const { StatusCodes } = require("http-status-codes");
 const { AdminService } = require("../services");
 
+function buildResponse(success, message, data = {}, error = {}) {
+    return { success, message, data, error };
+}
+
+function serializeAdmin(user) {
+    if (!user) {
+        return null;
+    }
+
+    const serialized = typeof user.toObject === 'function' ? user.toObject() : { ...user };
+    delete serialized.password;
+    return serialized;
+}
 
 async function signIn(req,res) {
     try {
@@ -12,16 +25,18 @@ async function signIn(req,res) {
         const user=await AdminService.signIn(data);
         if(user){
             const token=await AdminService.generateToken(user);
-            SuccessResponse.data={user,token};
-            SuccessResponse.message="User logged in successfully";
-            return res.status(StatusCodes.OK).json(SuccessResponse);
+            return res.status(StatusCodes.OK).json(
+                buildResponse(true, "User logged in successfully", { user: serializeAdmin(user), token }, {})
+            );
         }
-        ErrorResponse.message="Invalid credentials";
-        return res.status(StatusCodes.BAD_REQUEST).json(ErrorResponse);
+        return res.status(StatusCodes.BAD_REQUEST).json(
+            buildResponse(false, "Invalid credentials", {}, "Invalid credentials")
+        );
     } catch (error) {
         console.log(error);
-        ErrorResponse.error=error;
-        return res.status(StatusCodes.BAD_REQUEST).json(ErrorResponse);
+        return res.status(StatusCodes.BAD_REQUEST).json(
+            buildResponse(false, "Invalid credentials", {}, error.message)
+        );
     }
 }
 
@@ -34,14 +49,15 @@ async function changeLevel(req,res) {
         };
         const user=await AdminService.changeLevel(data);
         if(user){
-            SuccessResponse.data=user;
-            SuccessResponse.message="User level changed successfully";
-            return res.status(StatusCodes.OK).json(SuccessResponse);
+            return res.status(StatusCodes.OK).json(
+                buildResponse(true, "User level changed successfully", user, {})
+            );
         }
     } catch (error) {
         console.log(error);
-        ErrorResponse.error=error;
-        return res.status(StatusCodes.BAD_REQUEST).json(ErrorResponse);
+        return res.status(StatusCodes.BAD_REQUEST).json(
+            buildResponse(false, "Unable to change level", {}, error.message)
+        );
     }
 }
 
