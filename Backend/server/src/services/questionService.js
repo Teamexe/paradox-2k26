@@ -18,26 +18,34 @@ async function nextQues(answer,userId){
         console.log('User:',user);
         const isCorrect=await quesRepo.verifyQuestion(user.currQues,answer);
         const plusScore=Number(serverConfig.SCORE);
-       console.log(await(quesRepo.lastQues()));
-        if(user.currQues===await(quesRepo.lastQues(user.currLvl))){
-            const updateUser=await AuthRepo.update(userId,{currQues:0,score:((user.score)+plusScore)});
-            const response="Level is finished";
-            return response;
+        const hintUsed = Array.isArray(user.hintUsed) ? user.hintUsed.length : 0;
+        const lastQuestionId = await quesRepo.lastQues(user.currLvl);
+
+        if(!isCorrect){
+            return {
+                score: user.score - (hintUsed * 10),
+                message: "Wrong Answer"
+            };
         }
-        if(isCorrect){
-            const newQues=await quesRepo.nextQues(user.currQues,user.currLvl);
-            const updateUser=await AuthRepo.update(userId,{currQues:newQues.id,score:((user.score)+plusScore)});
-            const hintUsed = Array.isArray(user.hintUsed) ? user.hintUsed.length : 0;
-            console.log('updatedUser',updateUser);
-            newQues.hint=undefined;
-            newQues.answer=undefined;
-            const response={
-                newQues:newQues,
-                score:(updateUser.score+plusScore)-(hintUsed * 10),
-                message:"Correct Answer"
-            }
-            return response;
+
+        if(user.currQues === lastQuestionId){
+            const updatedUser = await AuthRepo.update(userId,{currQues:0,score:user.score + plusScore});
+            return {
+                score: updatedUser.score - (hintUsed * 10),
+                message: "Level is finished"
+            };
         }
+
+        const newQues=await quesRepo.nextQues(user.currQues,user.currLvl);
+        const updatedUser=await AuthRepo.update(userId,{currQues:newQues.id,score:user.score + plusScore});
+        console.log('updatedUser',updatedUser);
+        newQues.hint=undefined;
+        newQues.answer=undefined;
+        return {
+            newQues:newQues,
+            score:updatedUser.score - (hintUsed * 10),
+            message:"Correct Answer"
+        };
     } catch (error) {
         console.log(error);
         throw new AppError(error,StatusCodes.BAD_REQUEST);
@@ -70,9 +78,10 @@ async function currentQues(user) {
             return response;
         }
         const ques=await quesRepo.getAll(query);
+        if (!Array.isArray(ques) || ques.length === 0) {
+            throw new AppError("Current question not found", StatusCodes.NOT_FOUND);
+        }
         console.log("Current Quest:",ques);
-        ques.hint=undefined;
-        ques.answer=undefined;
         const hintUsed = Array.isArray(user.hintUsed) ? user.hintUsed.length : 0;
         ques[0].hint=undefined;
         ques[0].answer=undefined;
@@ -94,6 +103,9 @@ async function hint(user) {
     try {
         const query={ lvl: user.currLvl, id: user.currQues };
         const response=await quesRepo.getAll(query);
+        if (!Array.isArray(response) || response.length === 0) {
+            throw new AppError("Current question not found", StatusCodes.NOT_FOUND);
+        }
         console.log("Current Quest hint:",response);
         const hintUsed=await AuthRepo.addHintUsed(user._id,response[0]._id);
         console.log(hintUsed);

@@ -3,6 +3,14 @@ const { ErrorResponse } = require('../utils/common');
 const AppError = require('../utils/errors/appError');
 const  {AdminService}  = require('../services');
 
+function buildErrorResponse(message, error) {
+    return {
+        success: false,
+        message,
+        data: {},
+        error
+    };
+}
 
 
 
@@ -13,7 +21,9 @@ async function checkAdmin(req,res,next){
         if (!authHeader) {
             throw new AppError('No token provided', StatusCodes.UNAUTHORIZED);
         }
-        const token = authHeader.split(' ')[1]; // Extract the token part after 'Bearer'
+        const token = authHeader.startsWith('Bearer ')
+            ? authHeader.split(' ')[1]
+            : authHeader.trim();
         console.log(token)
         if (!token) {
             throw new AppError('No token provided', StatusCodes.UNAUTHORIZED);
@@ -28,9 +38,9 @@ async function checkAdmin(req,res,next){
    }
     catch(error){
         console.log(error)
-        ErrorResponse.message="You are not authorized to access this resource";
-        ErrorResponse.error=error
-        return res.status(StatusCodes.UNAUTHORIZED).json(ErrorResponse);
+        return res.status(StatusCodes.UNAUTHORIZED).json(
+            buildErrorResponse("You are not authorized to access this resource", error.message || error)
+        );
     }
 }
 
@@ -39,4 +49,3 @@ async function checkAdmin(req,res,next){
   
 
 module.exports=  {checkAdmin}
-

@@ -52,8 +52,7 @@ app.get('/', (req, res) => {
 app.use('/api', apiRoutes);
 
 
-const PORT = serverConfig.BACKEND_PORT ;
-app.listen(PORT, () => {
+const PORT = Number(process.env.PORT || serverConfig.BACKEND_PORT || 5000);
+app.listen(PORT, '0.0.0.0', () => {
     console.log(`Server running on port ${PORT}`);
 });
-
