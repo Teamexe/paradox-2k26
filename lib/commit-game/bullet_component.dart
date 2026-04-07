@@ -1,7 +1,11 @@
 import 'dart:math';
 import 'package:flame/components.dart';
 import 'package:flutter/material.dart';
+<<<<<<< HEAD
 import 'package:paradox_2k26/commit-game/constants.dart';
+=======
+import 'package:paradox/commit-game/constants.dart';
+>>>>>>> main
 
 class BulletComponent extends PositionComponent {
   final Point<int> startGridPosition;

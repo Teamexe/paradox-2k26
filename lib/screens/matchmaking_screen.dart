@@ -1,9 +1,16 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+<<<<<<< HEAD
 import 'package:paradox_2k26/commit-game/constants.dart';
 import 'package:paradox_2k26/screens/online_game_screen.dart';
 import 'package:paradox_2k26/services/firebase_service.dart';
 import 'package:paradox_2k26/services/matchmaking_service.dart';
+=======
+import 'package:paradox/commit-game/constants.dart';
+import 'package:paradox/screens/online_game_screen.dart';
+import 'package:paradox/services/firebase_service.dart';
+import 'package:paradox/services/matchmaking_service.dart';
+>>>>>>> main
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class MatchmakingScreen extends StatefulWidget {

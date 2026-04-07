@@ -1,5 +1,9 @@
 import 'dart:math';
+<<<<<<< HEAD
 import 'package:paradox_2k26/commit-game/constants.dart';
+=======
+import 'package:paradox/commit-game/constants.dart';
+>>>>>>> main
 
 class MapGenerator {
   final Random _random;

@@ -2,11 +2,19 @@ import 'dart:async';
 import 'dart:math';
 import 'dart:ui';
 import 'package:flutter/foundation.dart';
+<<<<<<< HEAD
 import 'package:paradox_2k26/commit-game/constants.dart';
 import 'package:paradox_2k26/commit-game/game_state.dart';
 import 'package:paradox_2k26/commit-game/map_generator.dart';
 import 'package:paradox_2k26/commit-game/player_model.dart';
 import 'package:paradox_2k26/models/match_model.dart';
+=======
+import 'package:paradox/commit-game/constants.dart';
+import 'package:paradox/commit-game/game_state.dart';
+import 'package:paradox/commit-game/map_generator.dart';
+import 'package:paradox/commit-game/player_model.dart';
+import 'package:paradox/models/match_model.dart';
+>>>>>>> main
 
 class GameManager {
   late List<List<int>> _grid;

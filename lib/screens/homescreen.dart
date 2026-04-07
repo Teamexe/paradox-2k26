@@ -1,9 +1,17 @@
 import 'package:flutter/material.dart';
+<<<<<<< HEAD
 import 'package:paradox_2k26/commit_clash_app.dart';
 import 'package:paradox_2k26/minigames/flappy_screen.dart';
 import 'package:paradox_2k26/minigames/mine_scan_screen.dart';
 import 'package:paradox_2k26/minigames/multi_task_screen.dart';
 import 'package:paradox_2k26/minigames/node_decryption_screen.dart';
+=======
+import 'package:paradox/commit_clash_app.dart';
+import 'package:paradox/minigames/flappy_screen.dart';
+import 'package:paradox/minigames/mine_scan_screen.dart';
+import 'package:paradox/minigames/multi_task_screen.dart';
+import 'package:paradox/minigames/node_decryption_screen.dart';
+>>>>>>> main
 import 'package:url_launcher/url_launcher.dart';
 
 import '../minigames/lights_out_screen.dart';

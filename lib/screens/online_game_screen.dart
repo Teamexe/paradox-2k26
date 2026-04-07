@@ -1,10 +1,18 @@
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
+<<<<<<< HEAD
 import 'package:paradox_2k26/commit-game/commit_clash_game.dart';
 import 'package:paradox_2k26/commit-game/game_overlay.dart';
 import 'package:paradox_2k26/commit-game/game_state.dart';
 import 'package:paradox_2k26/repositories/firestore_game_repository.dart';
 import 'package:paradox_2k26/services/firebase_service.dart';
+=======
+import 'package:paradox/commit-game/commit_clash_game.dart';
+import 'package:paradox/commit-game/game_overlay.dart';
+import 'package:paradox/commit-game/game_state.dart';
+import 'package:paradox/repositories/firestore_game_repository.dart';
+import 'package:paradox/services/firebase_service.dart';
+>>>>>>> main
 
 class OnlineGameScreen extends StatefulWidget {
   final String matchId;

@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
+<<<<<<< HEAD
 import 'package:paradox_2k26/commit-game/commit_clash_game.dart';
 import 'package:paradox_2k26/commit-game/game_state.dart';
 import 'package:paradox_2k26/commit-game/constants.dart';
+=======
+import 'package:paradox/commit-game/commit_clash_game.dart';
+import 'package:paradox/commit-game/game_state.dart';
+import 'package:paradox/commit-game/constants.dart';
+>>>>>>> main
 
 class GameOverlay extends StatelessWidget {
   final CommitClashGame game;

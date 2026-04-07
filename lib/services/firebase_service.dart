@@ -1,7 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
+<<<<<<< HEAD
 import 'package:paradox_2k26/firebase_options.dart';
+=======
+import 'package:paradox/firebase_options.dart';
+>>>>>>> main
 
 class FirebaseService {
   static final FirebaseService _instance = FirebaseService._internal();

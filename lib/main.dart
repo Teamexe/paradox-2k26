@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+<<<<<<< HEAD
 import 'package:provider/provider.dart';
 import 'package:paradox_2k26/screens/splash_screen.dart';
 import 'package:paradox_2k26/paradox_game/home_screen.dart';
@@ -19,6 +20,13 @@ void main() {
       child: const MyApp(),
     ),
   );
+=======
+import 'package:paradox/screen/splash_screen.dart';
+import 'package:paradox/theme/app_theme.dart';
+
+void main() {
+  runApp(const MyApp());
+>>>>>>> main
 }
 
 class MyApp extends StatelessWidget {
@@ -27,6 +35,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+<<<<<<< HEAD
       title: 'Paradox',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.darkGamingTheme,
@@ -68,6 +77,12 @@ class _MainScreenState extends State<MainScreen> {
           setState(() => _currentIndex = index);
         },
       ),
+=======
+      title: 'Pre-Paradox',
+      debugShowCheckedModeBanner: false,
+      theme: AppTheme.darkGamingTheme,
+      home: const SplashScreen(),
+>>>>>>> main
     );
   }
 }
