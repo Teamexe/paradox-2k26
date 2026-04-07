@@ -1,9 +1,15 @@
 import 'dart:async';
 import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
+<<<<<<< HEAD
+import 'package:paradox_2k26/commit-game/constants.dart';
+import 'package:paradox_2k26/models/match_model.dart';
+import 'package:paradox_2k26/commit-game/map_generator.dart';
+=======
 import 'package:paradox/commit-game/constants.dart';
 import 'package:paradox/models/match_model.dart';
 import 'package:paradox/commit-game/map_generator.dart';
+>>>>>>> main
 
 class MatchmakingService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;

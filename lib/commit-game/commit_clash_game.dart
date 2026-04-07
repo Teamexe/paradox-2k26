@@ -4,12 +4,21 @@ import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
+<<<<<<< HEAD
+import 'package:paradox_2k26/commit-game/bullet_component.dart';
+import 'package:paradox_2k26/commit-game/cell_component.dart';
+import 'package:paradox_2k26/commit-game/constants.dart';
+import 'package:paradox_2k26/commit-game/game_manager.dart';
+import 'package:paradox_2k26/commit-game/game_state.dart';
+import 'package:paradox_2k26/commit-game/player_component.dart';
+=======
 import 'package:paradox/commit-game/bullet_component.dart';
 import 'package:paradox/commit-game/cell_component.dart';
 import 'package:paradox/commit-game/constants.dart';
 import 'package:paradox/commit-game/game_manager.dart';
 import 'package:paradox/commit-game/game_state.dart';
 import 'package:paradox/commit-game/player_component.dart';
+>>>>>>> main
 
 class CommitClashGame extends FlameGame with TapCallbacks {
   late final GameManager gameManager;

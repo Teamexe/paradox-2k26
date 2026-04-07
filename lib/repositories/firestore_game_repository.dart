@@ -2,8 +2,13 @@ import 'dart:async';
 import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
+<<<<<<< HEAD
+import 'package:paradox_2k26/models/match_model.dart';
+import 'package:paradox_2k26/commit-game/constants.dart';
+=======
 import 'package:paradox/models/match_model.dart';
 import 'package:paradox/commit-game/constants.dart';
+>>>>>>> main
 
 class FirestoreGameRepository {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;

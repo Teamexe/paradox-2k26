@@ -1,8 +1,14 @@
 import 'package:flame/components.dart';
 import 'package:flutter/material.dart';
+<<<<<<< HEAD
+import 'package:paradox_2k26/commit-game/game_manager.dart';
+import 'package:paradox_2k26/commit-game/constants.dart';
+import 'package:paradox_2k26/commit-game/player_model.dart';
+=======
 import 'package:paradox/commit-game/game_manager.dart';
 import 'package:paradox/commit-game/constants.dart';
 import 'package:paradox/commit-game/player_model.dart';
+>>>>>>> main
 
 class PlayerComponent extends PositionComponent {
   final Player player;

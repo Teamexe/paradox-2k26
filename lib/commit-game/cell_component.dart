@@ -2,8 +2,13 @@ import 'dart:math';
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flutter/material.dart';
+<<<<<<< HEAD
+import 'package:paradox_2k26/commit-game/game_manager.dart';
+import 'package:paradox_2k26/commit-game/constants.dart';
+=======
 import 'package:paradox/commit-game/game_manager.dart';
 import 'package:paradox/commit-game/constants.dart';
+>>>>>>> main
 
 class CellComponent extends PositionComponent with TapCallbacks {
   final GameManager gameManager;

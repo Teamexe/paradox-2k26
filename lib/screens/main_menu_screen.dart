@@ -1,8 +1,14 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
+<<<<<<< HEAD
+import 'package:paradox_2k26/commit-game/constants.dart';
+import 'package:paradox_2k26/screens/matchmaking_screen.dart';
+import 'package:paradox_2k26/services/firebase_service.dart';
+=======
 import 'package:paradox/commit-game/constants.dart';
 import 'package:paradox/screens/matchmaking_screen.dart';
 import 'package:paradox/services/firebase_service.dart';
+>>>>>>> main
 
 class MainMenuScreen extends StatefulWidget {
   const MainMenuScreen({super.key});
