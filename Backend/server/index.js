@@ -1,14 +1,14 @@
 // Polyfill: SlowBuffer was removed in Node.js v25+
 const _buffer = require('buffer');
 if (!_buffer.SlowBuffer) {
-  _buffer.SlowBuffer = {
-    prototype: Buffer.prototype,
-  };
+    _buffer.SlowBuffer = {
+        prototype: Buffer.prototype,
+    };
 }
 
 const dotenv = require('dotenv');
 dotenv.config();
-const passport=require('passport')
+const passport = require('passport')
 const { serverConfig, dbConfig } = require('./src/config');
 const express = require('express');
 const app = express();
@@ -37,11 +37,12 @@ app.use(express.urlencoded({ extended: true }));
 
 mongoose.connect(dbConfig.MONGODB_URI, dbConfig.MONGOOSE_OPTIONS)
     .then(() => console.log('Connected to MongoDB'))
-    .catch(err => {console.log("MongoDB not connected",err)
+    .catch(err => {
+        console.log("MongoDB not connected", err)
         process.exit(1);
     }
-    
-);
+
+    );
 
 const apiRoutes = require('./src/routes');
 
@@ -51,8 +52,8 @@ app.get('/', (req, res) => {
 });
 app.use('/api', apiRoutes);
 
+const PORT = process.env.PORT || 10000;
 
-const PORT = Number(process.env.PORT || serverConfig.BACKEND_PORT || 5000);
 app.listen(PORT, '0.0.0.0', () => {
     console.log(`Server running on port ${PORT}`);
 });
