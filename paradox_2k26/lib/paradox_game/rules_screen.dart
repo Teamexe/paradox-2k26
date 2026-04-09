@@ -10,7 +10,7 @@ class RulesScreen extends StatelessWidget {
     'Levels: The game consists of two levels — Level 1 includes 40 image-based word guessing questions, while Level 2 contains 10 text-based riddles or puzzles.',
     'Scoring: Each correct answer will increase the score by 50 points.',
     'Use of Hint: Using hint will decrease the score by 10 points.',
-    'Qualification: Only the top 50 scorers from Level 1 will be eligible to move on to Level 2.',
+    'Qualification: Only the top 50 scorers from Level 1 will be eligible to move on to Level 2..',
   ];
 
   @override
