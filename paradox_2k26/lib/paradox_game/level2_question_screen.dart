@@ -163,7 +163,7 @@ class _Level2QuestionScreenState extends State<Level2QuestionScreen>
       context: context,
       builder: (context) => AlertDialog(
         backgroundColor: AppTheme.cardBlue,
-        title: const Text('Error', style: TextStyle(color: Colors.white)),
+        title: const Text('Error.', style: TextStyle(color: Colors.white)),
         content: Text(message, style: const TextStyle(color: Colors.white70)),
         actions: [
           TextButton(
