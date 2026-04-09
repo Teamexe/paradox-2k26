@@ -169,7 +169,7 @@ class _Level2QuestionScreenState extends State<Level2QuestionScreen>
           TextButton(
             onPressed: () => Navigator.of(context).pop(),
             child:
-                const Text('OK', style: TextStyle(color: AppTheme.accentCyan)),
+                const Text('OK', style: TextStyle(color: Colors.deepPurpleAccent)),
           ),
         ],
       ),
@@ -231,7 +231,7 @@ class _Level2QuestionScreenState extends State<Level2QuestionScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppTheme.bgDark,
+      backgroundColor: const Color(0xFF0A0A12),
       appBar: AppBar(
         title: Text(
           'Level ${widget.level}',
@@ -258,7 +258,7 @@ class _Level2QuestionScreenState extends State<Level2QuestionScreen>
                           fontWeight: FontWeight.bold,
                           color: Colors.white)),
                   const SizedBox(height: 20),
-                  const CircularProgressIndicator(color: AppTheme.accentCyan),
+                  const CircularProgressIndicator(color: Colors.purpleAccent),
                   const SizedBox(height: 10),
                   Text("Navigating to next screen...",
                       style: TextStyle(color: Colors.white.withOpacity(0.5))),
@@ -276,7 +276,7 @@ class _Level2QuestionScreenState extends State<Level2QuestionScreen>
                     width: double.infinity,
                     padding: const EdgeInsets.all(16),
                     decoration: BoxDecoration(
-                      color: AppTheme.cardBlue,
+                      color: Colors.deepPurple.withOpacity(0.3),
                       borderRadius: BorderRadius.circular(12),
                       border: Border.all(
                           color: AppTheme.accentCyan.withOpacity(0.15)),
@@ -365,7 +365,7 @@ class _Level2QuestionScreenState extends State<Level2QuestionScreen>
                     child: ElevatedButton(
                       onPressed: _isSubmitting ? null : _checkAnswer,
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: AppTheme.accentCyan,
+                        backgroundColor: Colors.deepPurple,
                         foregroundColor: AppTheme.bgDark,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12),

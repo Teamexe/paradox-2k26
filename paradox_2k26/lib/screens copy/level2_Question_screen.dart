@@ -184,14 +184,14 @@ class _Level2QuestionScreenState extends State<Level2QuestionScreen>
   Widget _buildQuestionContent(BuildContext context) {
     final String? description = _currentQuestion?['descriptionOrImgUrl'];
     if (description == null || _isLevelFinished) {
-      return const Center(child: Text('Level Finished!'));
+      return const Center(
+          child: Text('Level Finished!', style: TextStyle(color: Colors.white)));
     }
 
-    // Regular expression to find URLs in the text
     final RegExp urlRegex = RegExp(r'(https?://[\S]+)');
     final List<TextSpan> textSpans = [];
-    int currentIndex = 0;
 
+    // Improved parsing logic to avoid index issues
     description.splitMapJoin(
       urlRegex,
       onMatch: (Match match) {
@@ -200,91 +200,63 @@ class _Level2QuestionScreenState extends State<Level2QuestionScreen>
           TextSpan(
             text: url,
             style: const TextStyle(
-              color: Colors.blue,
+              color: Colors.cyanAccent,
               decoration: TextDecoration.underline,
+              fontWeight: FontWeight.bold,
             ),
-            recognizer:
-                TapGestureRecognizer()
-                  ..onTap = () async {
-                    if (await canLaunchUrl(Uri.parse(url))) {
-                      await launchUrl(Uri.parse(url));
-                    } else {
-                      _showErrorDialog('Could not launch $url');
-                    }
-                  },
+            recognizer: TapGestureRecognizer()
+              ..onTap = () async {
+                if (await canLaunchUrl(Uri.parse(url))) {
+                  await launchUrl(Uri.parse(url));
+                }
+              },
           ),
         );
-        currentIndex = match.end;
-        return url; // Must return the matched string
+        return url;
       },
       onNonMatch: (String text) {
-        if (currentIndex >= 0 && currentIndex < text.length) {
-          textSpans.add(
-            TextSpan(
-              text: text.substring(currentIndex),
-              style: const TextStyle(color: Colors.black),
-            ),
-          );
-          currentIndex = text.length;
-        } else {
-          // Handle the case where currentIndex is out of bounds
-          print(
-            'Warning: currentIndex out of bounds in onNonMatch: $currentIndex, text length: ${text.length}',
-          );
-          currentIndex = text.length; // Prevent further out-of-bounds issues
-        }
-        return text; // Must return the non-matched string
+        textSpans.add(TextSpan(
+          text: text,
+          style: const TextStyle(color: Colors.white, height: 1.5),
+        ));
+        return text;
       },
     );
 
-    // Add the remaining text if no URL was found or after the last URL
-    if (currentIndex >= 0 && currentIndex < description.length) {
-      textSpans.add(
-        TextSpan(
-          text: description.substring(currentIndex),
-          style: const TextStyle(color: Colors.black),
-        ),
-      );
-    } else if (description.isNotEmpty) {
-      print(
-        'Warning: currentIndex out of bounds for remaining text: $currentIndex, description length: ${description.length}',
-      );
-    }
-
     return SingleChildScrollView(
-      padding: EdgeInsets.all(MediaQuery.of(context).size.width * 0.05),
+      padding: const EdgeInsets.all(20),
       child: RichText(
         textAlign: TextAlign.center,
         text: TextSpan(
           children: textSpans,
-          style: TextStyle(fontSize: MediaQuery.of(context).size.width * 0.045),
+          style: TextStyle(
+            fontSize: MediaQuery.of(context).size.width * 0.045,
+            fontFamily: 'PixelFont', // Match your game theme
+          ),
         ),
       ),
     );
   }
-
   @override
   Widget build(BuildContext context) {
     final double width = MediaQuery.of(context).size.width;
     final double height = MediaQuery.of(context).size.height;
-    final double padding = width * 0.05;
-    final double normalFont = width * 0.045;
     final double scaleFactor = width / 390;
 
     return Scaffold(
+      extendBodyBehindAppBar: true, // Seamless background
       appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
         title: Text(
-          'Level ${widget.level} Question',
+          'LEVEL ${widget.level}',
           style: const TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
             fontFamily: 'PixelFont',
+            letterSpacing: 2,
+            fontSize: 24,
           ),
         ),
-        backgroundColor: Colors.black,
         centerTitle: true,
-        elevation: 0,
-        iconTheme: const IconThemeData(color: Colors.white),
       ),
       body: Container(
         width: width,
@@ -295,174 +267,139 @@ class _Level2QuestionScreenState extends State<Level2QuestionScreen>
             fit: BoxFit.cover,
           ),
         ),
-        child:
-            _isLevelFinished
-                ? const Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        "Level Finished!",
-                        style: TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                      SizedBox(height: 20),
-                      CircularProgressIndicator(), // Or any other indicator
-                      Text(
-                        "Navigating to next screen...",
-                        style: TextStyle(color: Colors.white),
-                      ),
-                    ],
-                  ),
-                )
-                : Column(
-                  children: [
-                    Expanded(
-                      child: SingleChildScrollView(
-                        padding: EdgeInsets.symmetric(
-                          horizontal: padding,
-                          vertical: padding * 0.5,
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Container(
-                              padding: EdgeInsets.all(padding * 0.75),
-                              decoration: BoxDecoration(
-                                color: Colors.grey.shade300,
-                                borderRadius: BorderRadius.circular(
-                                  15 * scaleFactor,
-                                ),
-                              ),
-                              child: Text(
-                                'Q: ${_currentQuestion?['title'] ?? 'Loading...'}',
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: normalFont,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                                textAlign: TextAlign.center,
-                              ),
-                            ),
-                            SizedBox(height: height * 0.03),
-                            Container(
-                              constraints: BoxConstraints(
-                                maxHeight: height * 0.6,
-                                maxWidth: width * 0.9,
-                              ),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(
-                                  15 * scaleFactor,
-                                ),
-                                color: Colors.grey.shade200,
-                              ),
-                              child: _buildQuestionContent(context),
-                            ),
-                            SizedBox(height: height * 0.025),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                const SizedBox(), // Placeholder for removed hint
-                                Container(
-                                  padding: EdgeInsets.symmetric(
-                                    horizontal: 15 * scaleFactor,
-                                    vertical: 8 * scaleFactor,
-                                  ),
-                                  decoration: BoxDecoration(
-                                    color: Colors.grey.shade800,
-                                    borderRadius: BorderRadius.circular(
-                                      10 * scaleFactor,
-                                    ),
-                                  ),
-                                  child: Text(
-                                    'Score: $_score',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: normalFont,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            SizedBox(height: height * 0.025),
-                            GestureDetector(
-                              onTap: () {
-                                FocusScope.of(context).requestFocus(_focusNode);
-                              },
-                              child: Container(
-                                padding: EdgeInsets.symmetric(
-                                  horizontal: 15 * scaleFactor,
-                                ),
-                                decoration: BoxDecoration(
-                                  color: Colors.grey.shade800,
-                                  borderRadius: BorderRadius.circular(
-                                    10 * scaleFactor,
-                                  ),
-                                ),
-                                child: TextField(
-                                  controller: _answerController,
-                                  style: const TextStyle(color: Colors.white),
-                                  decoration: const InputDecoration(
-                                    hintText: 'Type your answer here...',
-                                    hintStyle: TextStyle(color: Colors.grey),
-                                    border: InputBorder.none,
-                                  ),
-                                  focusNode: _focusNode,
-                                ),
-                              ),
-                            ),
-                            SizedBox(height: height * 0.025),
-                            SizedBox(
-                              width: double.infinity,
-                              height: height * 0.065,
-                              child: ElevatedButton(
-                                onPressed: _checkAnswer,
-                                style: ButtonStyle(
-                                  backgroundColor:
-                                      MaterialStateProperty.resolveWith<Color>((
-                                        Set<MaterialState> states,
-                                      ) {
-                                        if (states.contains(
-                                          MaterialState.pressed,
-                                        )) {
-                                          return Colors.grey;
-                                        }
-                                        return Colors.white;
-                                      }),
-                                  foregroundColor:
-                                      MaterialStateProperty.all<Color>(
-                                        Colors.black,
-                                      ),
-                                  shape: MaterialStateProperty.all<
-                                    RoundedRectangleBorder
-                                  >(
-                                    RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(
-                                        10 * scaleFactor,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                child: Text(
-                                  'Submit',
-                                  style: TextStyle(
-                                    fontSize: normalFont,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
+        child: SafeArea(
+          child: _isLevelFinished
+              ? _buildFinishedState()
+              : SingleChildScrollView(
+            padding: EdgeInsets.symmetric(horizontal: width * 0.06),
+            child: Column(
+              children: [
+                const SizedBox(height: 10),
+                // Score Badge
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    decoration: BoxDecoration(
+                      color: Colors.white.withOpacity(0.1),
+                      borderRadius: BorderRadius.circular(20),
+                      border: Border.all(color: Colors.cyanAccent.withOpacity(0.5)),
+                    ),
+                    child: Text(
+                      'SCORE: $_score',
+                      style: const TextStyle(
+                        color: Colors.cyanAccent,
+                        fontFamily: 'PixelFont',
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
-                  ],
+                  ),
                 ),
+                const SizedBox(height: 20),
+                // Question Title Card
+                Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.all(20),
+                  decoration: BoxDecoration(
+                    color: Colors.black.withOpacity(0.6),
+                    borderRadius: BorderRadius.circular(15),
+                    border: Border.all(color: Colors.white24),
+                  ),
+                  child: Text(
+                    _currentQuestion?['title'] ?? 'SCANNING...',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 20 * scaleFactor,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: 'PixelFont',
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 20),
+                // Question Content (Glassmorphism)
+                Container(
+                  constraints: BoxConstraints(minHeight: height * 0.2, maxHeight: height * 0.4),
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    color: Colors.white.withOpacity(0.05),
+                    borderRadius: BorderRadius.circular(20),
+                    border: Border.all(color: Colors.white10),
+                  ),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(20),
+                    child: _buildQuestionContent(context),
+                  ),
+                ),
+                const SizedBox(height: 30),
+                // Answer Input
+                TextField(
+                  controller: _answerController,
+                  focusNode: _focusNode,
+                  style: const TextStyle(color: Colors.white, fontFamily: 'PixelFont'),
+                  decoration: InputDecoration(
+                    hintText: 'ENTER KEYCODE...',
+                    hintStyle: TextStyle(color: Colors.white.withOpacity(0.3)),
+                    filled: true,
+                    fillColor: Colors.black.withOpacity(0.4),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: const BorderSide(color: Colors.white24),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: const BorderSide(color: Colors.cyanAccent),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 25),
+                // Submit Button
+                SizedBox(
+                  width: double.infinity,
+                  height: 55,
+                  child: ElevatedButton(
+                    onPressed: _checkAnswer,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.cyanAccent,
+                      foregroundColor: Colors.black,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      elevation: 10,
+                      shadowColor: Colors.cyanAccent.withOpacity(0.5),
+                    ),
+                    child: const Text(
+                      'SUBMIT',
+                      style: TextStyle(
+                        fontFamily: 'PixelFont',
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 20),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildFinishedState() {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: const [
+          CircularProgressIndicator(color: Colors.cyanAccent),
+          SizedBox(height: 20),
+          Text(
+            "LEVEL COMPLETE\nSYNCING DATA...",
+            textAlign: TextAlign.center,
+            style: TextStyle(color: Colors.white, fontFamily: 'PixelFont', fontSize: 18),
+          ),
+        ],
       ),
     );
   }

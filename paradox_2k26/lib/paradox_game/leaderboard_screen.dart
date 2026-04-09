@@ -286,48 +286,94 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
     required String name,
     required int score,
   }) {
+    // Determine if we show an emoji or a styled number
+    Widget rankLeading;
+    if (rank == 1) {
+      rankLeading = const Text('🥇', style: TextStyle(fontSize: 22));
+    } else if (rank == 2) {
+      rankLeading = const Text('🥈', style: TextStyle(fontSize: 22));
+    } else if (rank == 3) {
+      rankLeading = const Text('🥉', style: TextStyle(fontSize: 22));
+    } else {
+      rankLeading = Text(
+        rank.toString().padLeft(2, '0'),
+        style: TextStyle(
+          color: Colors.white.withOpacity(0.3),
+          fontWeight: FontWeight.bold,
+          fontFamily: 'monospace',
+        ),
+      );
+    }
+
     return Container(
-      margin: const EdgeInsets.only(bottom: 12),
-      padding: const EdgeInsets.all(12),
+      margin: const EdgeInsets.only(bottom: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.03), // Subtle glass effect
-        borderRadius: BorderRadius.circular(15),
-        border: Border.all(color: Colors.white.withOpacity(0.07)),
+        // Subtle gradient for a "glass" look
+        gradient: LinearGradient(
+          colors: [
+            Colors.white.withOpacity(0.05),
+            Colors.white.withOpacity(0.01),
+          ],
+        ),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(
+          color: rank <= 3
+              ? AppTheme.accentCyan.withOpacity(0.2)
+              : Colors.white.withOpacity(0.05),
+        ),
       ),
       child: Row(
         children: [
-          Text(
-            rank.toString().padLeft(2, '0'),
-            style: TextStyle(
-              color: Colors.white.withOpacity(0.5),
-              fontFamily: 'monospace',
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          const SizedBox(width: 15),
+          SizedBox(width: 35, child: Center(child: rankLeading)),
+          const SizedBox(width: 12),
+          // Avatar with Initial
           CircleAvatar(
-            radius: 18,
-            backgroundColor: Colors.white10,
-            child: Text(name[0], style: const TextStyle(color: Colors.white, fontSize: 12)),
+            radius: 16,
+            backgroundColor: rank <= 3 ? AppTheme.accentCyan.withOpacity(0.1) : Colors.white10,
+            child: Text(
+              name.isNotEmpty ? name[0].toUpperCase() : '?',
+              style: TextStyle(
+                color: rank <= 3 ? AppTheme.accentCyan : Colors.white60,
+                fontSize: 12,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
           ),
           const SizedBox(width: 15),
           Expanded(
             child: Text(
               name,
-              style: const TextStyle(color: Colors.white, fontSize: 15, fontWeight: FontWeight.w500),
+              style: TextStyle(
+                color: rank <= 3 ? Colors.white : Colors.white.withOpacity(0.8),
+                fontSize: 15,
+                fontWeight: rank <= 3 ? FontWeight.bold : FontWeight.normal,
+              ),
             ),
           ),
-          Text(
-            score.toString(),
-            style: TextStyle(
-              color: AppTheme.accentCyan,
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-              fontFamily: 'monospace',
-            ),
+          // Score Section
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Text(
+                score.toString(),
+                style: TextStyle(
+                  color: Colors.pink,
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  fontFamily: 'monospace',
+                ),
+              ),
+              Text(
+                'PTS',
+                style: TextStyle(
+                  color: Colors.white.withOpacity(0.2),
+                  fontSize: 9,
+                  letterSpacing: 1,
+                ),
+              ),
+            ],
           ),
-          const SizedBox(width: 5),
-          const Icon(Icons.bolt, color: Colors.orange, size: 16),
         ],
       ),
     );

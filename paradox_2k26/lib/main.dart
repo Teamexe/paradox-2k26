@@ -33,7 +33,7 @@ class MyApp extends StatelessWidget {
       title: 'Paradox',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.darkGamingTheme,
-    home: ParadoxMainWrapper(),
+    home: Level2QuestionScreen(level: 2, onLevelComplete: (){}),
     );
   }
 }

@@ -25,7 +25,7 @@ class _QuestionScreenState extends State<QuestionScreen>
     with SingleTickerProviderStateMixin {
   final TextEditingController _answerController = TextEditingController();
   Map<String, dynamic>? _currentQuestion;
-  bool _isHintVisible = false;
+  bool _isHintVisible = true;
   bool _isHintUsed = false;
   int _score = 0;
   int _questionNumber = 1;
@@ -225,231 +225,236 @@ class _QuestionScreenState extends State<QuestionScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppTheme.bgDark,
+      backgroundColor: const Color(0xFF0A0A12),
+      extendBodyBehindAppBar: true,
       appBar: AppBar(
-        title: Text(
-          'Level ${widget.level}',
-          style: const TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
-            letterSpacing: 2,
-            fontFamily: 'monospace',
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        centerTitle: true,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios_new, color: Colors.white, size: 20),
+          onPressed: () => Navigator.pop(context),
+        ),
+        title: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+
+          child: Text(
+            'LEVEL ${widget.level}',
+            style: const TextStyle(
+              color: Colors.deepPurpleAccent,
+              fontWeight: FontWeight.bold,
+              fontSize: 14,
+              letterSpacing: 3,
+            ),
           ),
         ),
-        backgroundColor: Colors.transparent,
-        centerTitle: true,
-        elevation: 0,
-        iconTheme: const IconThemeData(color: Colors.white54),
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            // Question title
-            Container(
-              width: double.infinity,
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: AppTheme.cardBlue,
-                borderRadius: BorderRadius.circular(12),
-                border: Border.all(
-                    color: AppTheme.accentCyan.withOpacity(0.15)),
-              ),
-              child: Text(
-                'Q: ${_currentQuestion?['title'] ?? 'Loading...'}',
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                ),
-                textAlign: TextAlign.center,
+      body: Stack(
+        children: [
+          // Background Glow
+
+          SafeArea(
+            child: SingleChildScrollView(
+              physics: const BouncingScrollPhysics(),
+              padding: const EdgeInsets.all(20),
+              child: Column(
+                children: [
+                  // Score & Stats Header
+                  _buildStatRow(),
+                  const SizedBox(height: 24),
+
+                  // Question Card
+
+
+                  // Image Container
+                  _buildImageFrame(),
+                  const SizedBox(height: 24),
+
+                  // Hint Section
+                  if (_isHintVisible) _buildHintBox(),
+
+                  // Answer Input
+                  _buildAnswerInput(),
+                  const SizedBox(height: 32),
+
+                  // Submit Button
+                  _buildSubmitButton(),
+                  const SizedBox(height: 40),
+                ],
               ),
             ),
-            const SizedBox(height: 20),
-
-            // Question image
-            Container(
-              constraints: BoxConstraints(
-                maxHeight: MediaQuery.of(context).size.height * 0.4,
-              ),
-              decoration: BoxDecoration(
-                color: AppTheme.cardBlue,
-                borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: Colors.white10),
-              ),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(12),
-                child: _currentQuestion?['descriptionOrImgUrl'] != null
-                    ? Image.network(
-                        _currentQuestion!['descriptionOrImgUrl'],
-                        fit: BoxFit.contain,
-                        loadingBuilder: (context, child, loadingProgress) {
-                          if (loadingProgress == null) return child;
-                          return const SizedBox(
-                            height: 200,
-                            child: Center(
-                              child: CircularProgressIndicator(
-                                  color: AppTheme.accentCyan),
-                            ),
-                          );
-                        },
-                        errorBuilder: (context, error, stackTrace) =>
-                            const SizedBox(
-                          height: 200,
-                          child: Center(
-                            child: Text('Image not available',
-                                style: TextStyle(color: Colors.white38)),
-                          ),
-                        ),
-                      )
-                    : const SizedBox(
-                        height: 200,
-                        child: Center(
-                          child: Text('Loading Image...',
-                              style: TextStyle(color: Colors.white38)),
-                        ),
-                      ),
-              ),
-            ),
-            const SizedBox(height: 16),
-
-            // Hint display
-            if (_isHintVisible && _currentQuestion?['hint'] != null)
-              Container(
-                width: double.infinity,
-                padding: const EdgeInsets.all(12),
-                margin: const EdgeInsets.only(bottom: 12),
-                decoration: BoxDecoration(
-                  color: const Color(0xFFBC13FE).withOpacity(0.1),
-                  borderRadius: BorderRadius.circular(10),
-                  border: Border.all(
-                      color: const Color(0xFFBC13FE).withOpacity(0.3)),
-                ),
-                child: Text(
-                  'Hint: ${_currentQuestion!['hint']}',
-                  style:
-                      const TextStyle(color: Color(0xFFD183FF), fontSize: 14),
-                  textAlign: TextAlign.center,
-                ),
-              ),
-
-            // Hint + Score row
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                GestureDetector(
-                  onTap: () {
-                    if (!_isHintVisible) {
-                      _fetchHint();
-                    } else {
-                      setState(() => _isHintVisible = false);
-                    }
-                  },
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 12, vertical: 8),
-                    decoration: BoxDecoration(
-                      color: AppTheme.cardBlue,
-                      borderRadius: BorderRadius.circular(8),
-                      border: Border.all(color: Colors.white10),
-                    ),
-                    child: Row(
-                      children: [
-                        const Icon(Icons.lightbulb_outline,
-                            color: Color(0xFFFFD700), size: 18),
-                        const SizedBox(width: 6),
-                        Text(
-                          _isHintVisible ? 'Hide Hint' : 'Hint (-10)',
-                          style: const TextStyle(
-                              color: Colors.white70, fontSize: 13),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 14, vertical: 8),
-                  decoration: BoxDecoration(
-                    color: AppTheme.cardBlue,
-                    borderRadius: BorderRadius.circular(8),
-                    border: Border.all(
-                        color: AppTheme.accentCyan.withOpacity(0.2)),
-                  ),
-                  child: Text(
-                    'Score: $_score',
-                    style: const TextStyle(
-                      color: AppTheme.accentCyan,
-                      fontSize: 14,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 20),
-
-            // Answer field
-            Container(
-              decoration: BoxDecoration(
-                color: AppTheme.cardBlue,
-                borderRadius: BorderRadius.circular(12),
-                border: Border.all(
-                    color: AppTheme.accentCyan.withOpacity(0.15)),
-              ),
-              child: TextField(
-                controller: _answerController,
-                focusNode: _focusNode,
-                style: const TextStyle(color: Colors.white),
-                decoration: const InputDecoration(
-                  hintText: 'Type your answer here...',
-                  hintStyle: TextStyle(color: Colors.white24),
-                  border: InputBorder.none,
-                  contentPadding:
-                      EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-                ),
-              ),
-            ),
-            const SizedBox(height: 20),
-
-            // Submit button
-            SizedBox(
-              width: double.infinity,
-              height: 52,
-              child: ElevatedButton(
-                onPressed: _isSubmitting ? null : _checkAnswer,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppTheme.accentCyan,
-                  foregroundColor: AppTheme.bgDark,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  elevation: 0,
-                ),
-                child: _isSubmitting
-                    ? const SizedBox(
-                        width: 22,
-                        height: 22,
-                        child: CircularProgressIndicator(
-                          strokeWidth: 2,
-                          color: AppTheme.bgDark,
-                        ),
-                      )
-                    : const Text(
-                        'SUBMIT',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                          letterSpacing: 2,
-                        ),
-                      ),
-              ),
-            ),
-            const SizedBox(height: 30),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
+
+  Widget _buildStatRow() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        _statBadge(Icons.emoji_events_outlined, 'Score', '$_score', Colors.pink),
+        GestureDetector(
+          onTap: _isHintVisible ? () => setState(() => _isHintVisible = false) : _fetchHint,
+          child: _statBadge(
+              Icons.lightbulb_outline,
+              'Hint',
+              _isHintVisible ? 'Hide' : '-10 PTS',
+              const Color(0xFFBC13FE)
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _statBadge(IconData icon, String label, String value, Color color) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+      decoration: BoxDecoration(
+        color: AppTheme.cardBlue.withOpacity(0.4),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: color.withOpacity(0.3)),
+      ),
+      child: Row(
+        children: [
+          Icon(icon, color: color, size: 18),
+          const SizedBox(width: 8),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(label, style: const TextStyle(color: Colors.white38, fontSize: 10)),
+              Text(value, style: TextStyle(color: color, fontWeight: FontWeight.bold, fontSize: 13)),
+            ],
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget _buildQuestionCard() {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: AppTheme.cardBlue,
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: Colors.white.withOpacity(0.05)),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.2),
+            blurRadius: 10,
+            offset: const Offset(0, 5),
+          )
+        ],
+      ),
+
+    );
+  }
+
+  Widget _buildImageFrame() {
+    return Container(
+      width: double.infinity,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: Colors.white10),
+      ),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(20),
+        child: _currentQuestion?['descriptionOrImgUrl'] != null
+            ? Image.network(
+          _currentQuestion!['descriptionOrImgUrl'],
+          fit: BoxFit.cover,
+          loadingBuilder: (context, child, loading) {
+            if (loading == null) return child;
+            return const SizedBox(height: 200, child: Center(child: CircularProgressIndicator(color: Colors.purple)));
+          },
+          errorBuilder: (c, e, s) => const SizedBox(
+              height: 100,
+              child: Center(child: Text('Data Decryption Failed (No Image)', style: TextStyle(color: Colors.white24)))
+          ),
+        )
+            : const SizedBox(height: 200, child: Center(child: CircularProgressIndicator(color: Colors.purple))),
+      ),
+    );
+  }
+
+  Widget _buildHintBox() {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 24),
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: const Color(0xFFBC13FE).withOpacity(0.05),
+        borderRadius: BorderRadius.circular(15),
+        border: Border.all(color: const Color(0xFFBC13FE).withOpacity(0.3)),
+      ),
+      child: Row(
+        children: [
+          const Icon(Icons.info_outline, color: Color(0xFFD183FF), size: 20),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Text(
+              _currentQuestion?['hint'] ?? 'Hint loading...',
+              style: const TextStyle(color: Color(0xFFD183FF), fontSize: 14, fontStyle: FontStyle.italic),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildAnswerInput() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Padding(
+          padding: EdgeInsets.only(left: 4, bottom: 8),
+          child: Text('YOUR ANSWER', style: TextStyle(color: Colors.white38, fontSize: 12, letterSpacing: 1)),
+        ),
+        TextField(
+          controller: _answerController,
+          focusNode: _focusNode,
+          style: const TextStyle(color: Colors.white, fontSize: 16),
+          cursorColor: Colors.purpleAccent,
+          decoration: InputDecoration(
+            filled: true,
+            fillColor: AppTheme.cardBlue,
+            hintText: 'Enter findings...',
+            hintStyle: const TextStyle(color: Colors.white24),
+            contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(15),
+              borderSide: const BorderSide(color: Colors.white10),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(15),
+              borderSide: const BorderSide(color: Colors.deepPurple, width: 1.5),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildSubmitButton() {
+    return SizedBox(
+      width: double.infinity,
+      height: 56,
+      child: ElevatedButton(
+        onPressed: _isSubmitting ? null : _checkAnswer,
+        style: ElevatedButton.styleFrom(
+          backgroundColor: Colors.deepPurple,
+          foregroundColor: AppTheme.bgDark,
+          elevation: 10,
+          shadowColor: AppTheme.accentCyan.withOpacity(0.3),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+        ),
+        child: _isSubmitting
+            ? const SizedBox(height: 24, width: 24, child: CircularProgressIndicator(strokeWidth: 2.5, color: AppTheme.bgDark))
+            : const Text('SUBMIT', style: TextStyle(fontWeight: FontWeight.w900, letterSpacing: 2, fontSize: 16)),
+      ),
+    );
+  }
+
+// Logic Methods (_fetchCurrentQuestion, _checkAnswer, etc.) go here...
 }
+
