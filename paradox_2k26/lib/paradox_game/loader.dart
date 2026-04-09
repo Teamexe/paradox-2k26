@@ -31,7 +31,7 @@ class _LoaderScreenState extends State<LoaderScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppTheme.bgDark,
+      backgroundColor: const Color(0xFF0A0A12),
       body: Center(
         child: AnimatedBuilder(
           animation: _controller,

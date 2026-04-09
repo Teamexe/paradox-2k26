@@ -93,162 +93,23 @@ class ParadoxDashboard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+
+        title: const Text('Mini Games'),
+        leading: IconButton(onPressed: (){Navigator.pop(context);}, icon: Icon(Icons.keyboard_arrow_left)),
+        centerTitle: true, // Optional: Centers the text
+        automaticallyImplyLeading: false, // Removes the back button if it exists
+        elevation: 0, // Optional: Removes the shadow for a flat look
+      ),
       backgroundColor: const Color(0xFF0A0A12),
       body: CustomScrollView(
         slivers: [
           // 1. TOP BANNER SECTION
-          SliverToBoxAdapter(
-            child: Stack(
-              clipBehavior: Clip.none,
-              children: [
-                // Banner Background
-                Container(
-                  height: 200,
-                  width: double.infinity,
-                  margin: const EdgeInsets.only(
-                    left: 20,
-                    right: 20,
-                    top: 50,
-                    bottom: 20,
-                  ),
-                  padding: const EdgeInsets.all(10),
-                  decoration: BoxDecoration(
-                    image: DecorationImage(
-                      image: AssetImage("assets/images/para.jpg"),
-                      fit: BoxFit.cover,
 
-                      colorFilter: ColorFilter.mode(
-                        Colors.red.withOpacity(0.4),
-                        BlendMode.dstATop,
-                      ),
-                    ),
-                    gradient: const LinearGradient(
-                      colors: [Color(0xFF1A1A2E), Color(0xFF16213E)],
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                    ),
-                    borderRadius: BorderRadius.circular(30),
-                    border: Border.all(color: Colors.white10),
-                  ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text(
-                        "ParaDoTexe",
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 42,
-                          fontWeight: FontWeight.bold,
-                          letterSpacing: -2,
-                        ),
-                      ),
-                      Row(
-                        children: [
-                          InkWell(
-                            onTap: () async {
-                              final Uri url = Uri.parse(
-                                "https://drive.google.com/drive/folders/13e5_gMNcVEiUkmeNUuu5qxfuj2JkrZ9M?usp=sharing",
-                              );
-
-                              // Check if the URL can be launched first
-                              if (await canLaunchUrl(url)) {
-                                await launchUrl(
-                                  url,
-                                  mode: LaunchMode
-                                      .externalApplication, // Opens in Chrome/Safari/Drive App
-                                );
-                              } else {
-                                // If it fails, try a fallback mode
-                                await launchUrl(
-                                  url,
-                                  mode: LaunchMode.platformDefault,
-                                );
-                              }
-                            },
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 12,
-                                vertical: 4,
-                              ),
-                              decoration: BoxDecoration(
-                                color: const Color(0xFFBC13FE),
-                                borderRadius: BorderRadius.circular(20),
-                              ),
-                              child: const Text(
-                                "COMING SOON",
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.bold,
-                                  letterSpacing: 2,
-                                ),
-                              ),
-                            ),
-                          ),
-                          IconButton(
-                            icon: const Icon(Icons.arrow_circle_right_rounded),
-                            iconSize: 30,
-                            color: Colors.blue,
-                            onPressed: () async {
-                              final Uri url = Uri.parse(
-                                "https://drive.google.com/drive/folders/13e5_gMNcVEiUkmeNUuu5qxfuj2JkrZ9M?usp=sharing",
-                              );
-
-                              // Check if the URL can be launched first
-                              if (await canLaunchUrl(url)) {
-                                await launchUrl(
-                                  url,
-                                  mode: LaunchMode
-                                      .externalApplication, // Opens in Chrome/Safari/Drive App
-                                );
-                              } else {
-                                // If it fails, try a fallback mode
-                                await launchUrl(
-                                  url,
-                                  mode: LaunchMode.platformDefault,
-                                );
-                              }
-                            },
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-                // 2. STICKER IMAGE (Top Right)
-                Positioned(
-                  top: 50,
-                  right: 0,
-                  child: Image.asset(
-                    'assets/images/sticker.png', // ADD YOUR IMAGE HERE
-                    height: 180,
-                    width: 180,
-                    fit: BoxFit.contain,
-                    // Error builder so the app doesn't crash if image is missing
-                    errorBuilder: (context, error, stackTrace) => Container(
-                      height: 150,
-                      width: 150,
-                      decoration: BoxDecoration(
-                        color: Colors.white10,
-                        shape: BoxShape.circle,
-                        border: Border.all(color: Colors.white24),
-                      ),
-                      child: const Icon(
-                        Icons.image,
-                        color: Colors.white24,
-                        size: 50,
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
 
           // 3. GRID OF GAMES
           SliverPadding(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
             sliver: SliverGrid(
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,

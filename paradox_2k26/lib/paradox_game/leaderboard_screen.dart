@@ -56,7 +56,7 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
       final request = http.Request(
         'GET',
         Uri.parse(
-            'https://paradox-2025.vercel.app/api/v1/rank/leaderboard-stream'),
+            'https://paradox-2k26.onrender.com/api/v1/rank/leaderboard-stream'),
       );
       final response = _httpClient.send(request);
 
@@ -89,7 +89,13 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppTheme.bgDark,
+      appBar: AppBar(
+        title: const Text('Leaderboard'),
+        centerTitle: true, // Optional: Centers the text
+        automaticallyImplyLeading: false, // Removes the back button if it exists
+        elevation: 0, // Optional: Removes the shadow for a flat look
+      ),
+      backgroundColor: const Color(0xFF0A0A12),
       body: SafeArea(
         child: Consumer<LeaderboardProvider>(
           builder: (context, leaderboardProvider, child) {
@@ -110,22 +116,7 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
               children: [
                 const SizedBox(height: 20),
                 // Title
-                Text(
-                  'LEADERBOARD',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 22,
-                    fontWeight: FontWeight.bold,
-                    letterSpacing: 4,
-                    fontFamily: 'monospace',
-                    shadows: [
-                      Shadow(
-                        color: AppTheme.accentCyan.withOpacity(0.4),
-                        blurRadius: 10,
-                      ),
-                    ],
-                  ),
-                ),
+
                 const SizedBox(height: 24),
 
                 // Top 3 podium
@@ -211,132 +202,132 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
     required double height,
     required Color color,
   }) {
-    final truncatedName =
-        name.length > 10 ? '${name.substring(0, 10)}...' : name;
     return Expanded(
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
         children: [
-          // Avatar circle
-          Container(
-            width: 48,
-            height: 48,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              border: Border.all(color: color, width: 2),
-              color: AppTheme.cardBlue,
-            ),
-            child: Center(
-              child: Icon(Icons.person, color: color, size: 24),
-            ),
+          // Glow effect behind Rank
+          Stack(
+            alignment: Alignment.center,
+            children: [
+              Container(
+                width: rank == 1 ? 70 : 55,
+                height: rank == 1 ? 70 : 55,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  boxShadow: [
+                    BoxShadow(
+                      color: color.withOpacity(0.3),
+                      blurRadius: 20,
+                      spreadRadius: 2,
+                    )
+                  ],
+                ),
+              ),
+              CircleAvatar(
+                radius: rank == 1 ? 30 : 25,
+                backgroundColor: AppTheme.cardBlue,
+                child: Text(
+                  name.isNotEmpty ? name[0].toUpperCase() : '?',
+                  style: TextStyle(color: color, fontWeight: FontWeight.bold, fontSize: rank == 1 ? 24 : 18),
+                ),
+              ),
+              Positioned(
+                bottom: 0,
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                  decoration: BoxDecoration(
+                    color: color,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Text(
+                    "#$rank",
+                    style: const TextStyle(color: Colors.black, fontSize: 10, fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ),
+            ],
           ),
-          const SizedBox(height: 6),
+          const SizedBox(height: 12),
           Text(
-            truncatedName,
-            style: const TextStyle(
-                color: Colors.white, fontSize: 11, fontWeight: FontWeight.w600),
-            textAlign: TextAlign.center,
+            name,
+            maxLines: 1,
             overflow: TextOverflow.ellipsis,
+            style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 13),
           ),
-          const SizedBox(height: 4),
-          // Podium bar
+          const SizedBox(height: 8),
+          // The Bar
           Container(
             width: double.infinity,
             height: height,
+            margin: const EdgeInsets.symmetric(horizontal: 4),
             decoration: BoxDecoration(
-              color: color.withOpacity(0.15),
-              borderRadius:
-                  const BorderRadius.vertical(top: Radius.circular(8)),
-              border: Border.all(color: color.withOpacity(0.3)),
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [color.withOpacity(0.7), color.withOpacity(0.05)],
+              ),
+              borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
+              border: Border.all(color: color.withOpacity(0.5), width: 1.5),
             ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  '#$rank',
-                  style: TextStyle(
-                    color: color,
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                Text(
-                  '$score pts',
-                  style: TextStyle(
-                    color: color.withOpacity(0.7),
-                    fontSize: 11,
-                  ),
-                ),
-              ],
+            child: Center(
+              child: Text(
+                '$score',
+                style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16),
+              ),
             ),
           ),
         ],
       ),
     );
   }
-
   Widget _buildLeaderboardItem({
     required int rank,
     required String name,
     required int score,
   }) {
-    final isTop3 = rank <= 3;
-    final rankColor = rank == 1
-        ? AppTheme.accentCyan
-        : rank == 2
-            ? const Color(0xFFBC13FE)
-            : rank == 3
-                ? const Color(0xFF39FF14)
-                : Colors.white38;
-
     return Container(
-      margin: const EdgeInsets.symmetric(vertical: 4),
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+      margin: const EdgeInsets.only(bottom: 12),
+      padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: AppTheme.cardBlue,
-        borderRadius: BorderRadius.circular(10),
-        border: Border.all(
-          color: isTop3 ? rankColor.withOpacity(0.2) : Colors.white.withOpacity(0.05),
-        ),
+        color: Colors.white.withOpacity(0.03), // Subtle glass effect
+        borderRadius: BorderRadius.circular(15),
+        border: Border.all(color: Colors.white.withOpacity(0.07)),
       ),
       child: Row(
         children: [
-          Container(
-            width: 32,
-            height: 32,
-            decoration: BoxDecoration(
-              color: rankColor.withOpacity(0.15),
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: Center(
-              child: Text(
-                '$rank',
-                style: TextStyle(
-                  color: rankColor,
-                  fontSize: 14,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-          ),
-          const SizedBox(width: 14),
-          Expanded(
-            child: Text(
-              name,
-              style: const TextStyle(
-                color: Colors.white,
-                fontSize: 14,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-          ),
           Text(
-            '$score',
+            rank.toString().padLeft(2, '0'),
             style: TextStyle(
-              color: AppTheme.accentCyan.withOpacity(0.8),
-              fontSize: 14,
+              color: Colors.white.withOpacity(0.5),
+              fontFamily: 'monospace',
               fontWeight: FontWeight.bold,
             ),
           ),
+          const SizedBox(width: 15),
+          CircleAvatar(
+            radius: 18,
+            backgroundColor: Colors.white10,
+            child: Text(name[0], style: const TextStyle(color: Colors.white, fontSize: 12)),
+          ),
+          const SizedBox(width: 15),
+          Expanded(
+            child: Text(
+              name,
+              style: const TextStyle(color: Colors.white, fontSize: 15, fontWeight: FontWeight.w500),
+            ),
+          ),
+          Text(
+            score.toString(),
+            style: TextStyle(
+              color: AppTheme.accentCyan,
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+              fontFamily: 'monospace',
+            ),
+          ),
+          const SizedBox(width: 5),
+          const Icon(Icons.bolt, color: Colors.orange, size: 16),
         ],
       ),
     );

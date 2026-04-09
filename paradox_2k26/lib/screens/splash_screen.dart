@@ -196,7 +196,7 @@ class _SplashScreenState extends State<SplashScreen>
       child: Column(
         children: [
           Text(
-            'ParaDoTexe',
+            'ParaDox',
             style: TextStyle(
               color: Colors.white,
               fontSize: 32,
@@ -213,7 +213,7 @@ class _SplashScreenState extends State<SplashScreen>
           ),
           const SizedBox(height: 5),
           const Text(
-            "Pre-Paradox",
+            "by Team.EXE",
             style: TextStyle(
               color: Color(0xFF580DF1),
               fontSize: 20,

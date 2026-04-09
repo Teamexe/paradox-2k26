@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:paradox_2k26/paradox_game/home_screen.dart';
+import 'package:paradox_2k26/paradox_game/question_screen.dart';
+import 'package:paradox_2k26/screens/home.dart';
+import 'package:paradox_2k26/screens/homescreen.dart';
 import 'package:provider/provider.dart';
 import 'package:paradox_2k26/screens/splash_screen.dart';
-import 'package:paradox_2k26/paradox_game/home_screen.dart';
 import 'package:paradox_2k26/paradox_game/leaderboard_screen.dart';
 import 'package:paradox_2k26/paradox_game/rules_screen.dart';
 import 'package:paradox_2k26/paradox_game/prizes_screen.dart';
@@ -30,7 +33,7 @@ class MyApp extends StatelessWidget {
       title: 'Paradox',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.darkGamingTheme,
-    home: PrizesScreen(),
+    home: ParadoxMainWrapper(),
     );
   }
 }
@@ -46,8 +49,8 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   int _currentIndex = 0;
 
-  final List<Widget> _screens = const [
-    HomeScreen(),
+  final List<Widget> _screens =  [
+    ParadoxDashboard1(),
     LeaderboardScreen(),
     RulesScreen(),
     PrizesScreen(),
