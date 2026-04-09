@@ -1,7 +1,10 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
+import 'package:http/http.dart' as http show get;
 import 'package:paradox_2k26/commit_clash_app.dart';
 import 'package:paradox_2k26/minigames/flappy_screen.dart';
 import 'package:paradox_2k26/minigames/mine_scan_screen.dart';
@@ -13,9 +16,12 @@ import 'package:paradox_2k26/theme/app_theme.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../minigames/lights_out_screen.dart';
+import '../paradox_game/auth_choice_screen.dart';
 import '../paradox_game/level2_question_screen.dart';
 import '../paradox_game/level_complete_screen.dart';
 import '../paradox_game/question_screen.dart';
+import '../paradox_game/rules_screen.dart';
+import '../paradox_game/sign_in_screen.dart';
 import 'homescreen.dart';
 
 class ParadoxMainWrapper extends StatefulWidget {
@@ -33,7 +39,8 @@ class _ParadoxMainWrapperState extends State<ParadoxMainWrapper> {
   final List<Widget> _screens = [
     ProfileScreen(), // Left Tab
     ParadoxDashboard1(), // Center Tab (Your existing UI)
-    LeaderboardScreen(), // Right Tab
+    LeaderboardScreen(),
+    RulesScreen(),// Right Tab
   ];
 
   @override
@@ -50,6 +57,7 @@ class _ParadoxMainWrapperState extends State<ParadoxMainWrapper> {
           const Icon(Icons.person_outline, size: 30, color: Colors.white),
           const Icon(Icons.home_filled, size: 30, color: Colors.white),
           const Icon(Icons.leaderboard_outlined, size: 30, color: Colors.white),
+          const Icon(Icons.info_outline, size: 30, color: Colors.white),
         ],
         color: const Color(0xFF161F2E), // Match your Level Card color
         buttonBackgroundColor: Colors.deepPurpleAccent, // Neon Purple for the active notch
@@ -100,6 +108,80 @@ class _ParadoxDashboard1State extends State<ParadoxDashboard1> {
   int? userScore;
   int _currentLevel = 1;
   final storage = const FlutterSecureStorage();
+  @override
+  void initState() {
+    super.initState();
+    _checkAuthAndFetchData();
+  }
+
+  Future<void> _checkAuthAndFetchData() async {
+    final token = await storage.read(key: 'authToken');
+    if (token == null) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => AuthScreen()),
+      );
+      return;
+    }
+
+    try {
+      // Fetch home data
+      final homeResponse = await http.get(
+        Uri.parse('https://paradox-2k26.onrender.com/api/v1/home'),
+        headers: {'Authorization': 'Bearer $token'},
+      );
+
+      if (homeResponse.statusCode == 200 || homeResponse.statusCode == 202) {
+        final homeData = jsonDecode(homeResponse.body);
+        setState(() {
+          userName = homeData['name'];
+          userScore = homeData['score'];
+        });
+      } else if (homeResponse.statusCode == 401) {
+        await storage.delete(key: 'authToken');
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => SignInScreen()),
+        );
+        return; // Return to prevent further execution
+      } else {
+        print('Error fetching user home data: ${homeResponse.statusCode}');
+        _showErrorDialog('Error fetching user data');
+        return; // Return to prevent further execution
+      }
+
+      // Fetch current level
+      final levelResponse = await http.get(
+        Uri.parse('https://paradox-2k26.onrender.com/api/v1/currentLevel'),
+        headers: {'Authorization': 'Bearer $token'},
+      );
+
+      if (levelResponse.statusCode == 200 || levelResponse.statusCode == 202) {
+        final levelData = jsonDecode(levelResponse.body);
+        if (levelData['success'] == true) {
+          setState(() {
+            _currentLevel = levelData['data'];
+          });
+        } else {
+          print('Error fetching current level: ${levelData['message']}');
+          _showErrorDialog(
+            'Error fetching current level: ${levelData['message']}',
+          );
+          return;
+        }
+      } else {
+        print('Error fetching current level: ${levelResponse.statusCode}');
+        _showErrorDialog(
+          'Error fetching current level (Status: ${levelResponse.statusCode})',
+        );
+        return; // Return to prevent further execution
+      }
+    } catch (e) {
+      print('Error: $e');
+      _showErrorDialog('Network error. Please try again.');
+      return; // Return to prevent further execution
+    }
+  }
   late AnimationController _pulseController;
   late Animation<double> _pulseAnim;
   // Data for the 6 Games we created
@@ -242,8 +324,8 @@ class _ParadoxDashboard1State extends State<ParadoxDashboard1> {
       );
     } else {
       nextScreen = QuestionScreen(
-        level: level, onLevelComplete: () {  },
-        // onLevelComplete: () => _checkAuthAndFetchData(),
+        level: level,
+        onLevelComplete: () => _checkAuthAndFetchData(),
       );
     }
     Navigator.push(

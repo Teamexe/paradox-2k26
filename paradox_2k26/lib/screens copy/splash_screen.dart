@@ -34,7 +34,7 @@ class _SplashScreenState extends State<SplashScreen> {
       try {
         final response = await http.get(
           Uri.parse(
-            'https://paradox-2025.vercel.app/api/v1/home',
+            'https://paradox-2k26.onrender.com/api/v1/home',
           ), // Replace with your token validation endpoint
           headers: {'Authorization': 'Bearer $token'},
         );

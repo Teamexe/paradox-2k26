@@ -78,7 +78,7 @@ class _QuestionScreenState extends State<QuestionScreen>
 
     try {
       final response = await http.get(
-        Uri.parse('https://paradox-2025.vercel.app/api/v1/question/current'),
+        Uri.parse('https://paradox-2k26.onrender.com/api/v1/question/current'),
         headers: {'Authorization': 'Bearer $token'},
       );
 
@@ -115,7 +115,7 @@ class _QuestionScreenState extends State<QuestionScreen>
 
     try {
       final response = await http.patch(
-        Uri.parse('https://paradox-2025.vercel.app/api/v1/question/next'),
+        Uri.parse('https://paradox-2k26.onrender.com/api/v1/question/next'),
         headers: {
           'Authorization': 'Bearer $token',
           'Content-Type': 'application/json',
@@ -175,7 +175,7 @@ class _QuestionScreenState extends State<QuestionScreen>
 
     try {
       final response = await http.get(
-        Uri.parse('https://paradox-2025.vercel.app/api/v1/question/hint'),
+        Uri.parse('https://paradox-2k26.onrender.com/api/v1/question/hint'),
         headers: {'Authorization': 'Bearer $token'},
       );
 

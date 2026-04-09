@@ -51,7 +51,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
     try {
       final response = await http.post(
         Uri.parse(
-          'https://paradox-2025.vercel.app/api/v1/auth/signup/send-otp',
+          'https://paradox-2k26.onrender.com/api/v1/auth/signup/send-otp',
         ),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({'name': name, 'email': email, 'password': password}),
@@ -108,7 +108,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
     try {
       final response = await http.post(
-        Uri.parse('https://paradox-2025.vercel.app/api/v1/auth/signup'),
+        Uri.parse('https://paradox-2k26.onrender.com/api/v1/auth/signup'),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({
           'name': name,
@@ -209,7 +209,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     SizedBox(
                       height: scale(60),
                       child: Image.asset(
-                        'assets/images/paradox_text.png',
+                        'assets/images/all_bg.png',
                         fit: BoxFit.contain,
                       ),
                     ),

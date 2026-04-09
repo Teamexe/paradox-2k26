@@ -38,7 +38,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
     try {
       final response = await http.get(
-        Uri.parse('https://paradox-2025.vercel.app/api/v1/home'),
+        Uri.parse('https://paradox-2k26.onrender.com/api/v1/home'),
         headers: {'Authorization': 'Bearer $token'},
       );
 
@@ -123,11 +123,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             children: [
                               SizedBox(
                                 height: screenHeight * 0.05,
-                              ), // Spacing above paradox_text.png
+                              ), // Spacing above all_bg.png
                               SizedBox(
                                 height: screenHeight * 0.07,
                                 child: Image.asset(
-                                  'assets/images/paradox_text.png',
+                                  'assets/images/all_bg.png',
                                   fit: BoxFit.contain,
                                 ),
                               ),

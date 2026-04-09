@@ -134,7 +134,7 @@ class _AuthScreenState extends State<AuthScreen> {
                                 SizedBox(
                                   height: scale(80),
                                   child: Image.asset(
-                                    'assets/images/paradox_text.png',
+                                    'assets/images/all_bg.png',
                                   ),
                                 ),
                                 SizedBox(height: screenHeight * 0.05),

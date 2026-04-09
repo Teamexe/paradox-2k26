@@ -83,7 +83,7 @@ class _HurrayScreenState extends State<HurrayScreen>
             left: 0,
             right: 0,
             child: Image.asset(
-              'assets/images/paradox_text.png',
+              'assets/images/all_bg.png',
               height: screenSize.height * 0.1,
             ),
           ),

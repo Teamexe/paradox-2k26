@@ -47,7 +47,7 @@ class _HomeScreenState extends State<HomeScreen> {
     try {
       // Fetch home data
       final homeResponse = await http.get(
-        Uri.parse('https://paradox-2025.vercel.app/api/v1/home'),
+        Uri.parse('https://paradox-2k26.onrender.com/api/v1/home'),
         headers: {'Authorization': 'Bearer $token'},
       );
 
@@ -72,7 +72,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
       // Fetch current level
       final levelResponse = await http.get(
-        Uri.parse('https://paradox-2025.vercel.app/api/v1/currentLevel'),
+        Uri.parse('https://paradox-2k26.onrender.com/api/v1/currentLevel'),
         headers: {'Authorization': 'Bearer $token'},
       );
 
@@ -229,7 +229,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 SizedBox(
                   height: screenHeight * 0.07,
                   child: Image.asset(
-                    'assets/images/paradox_text.png',
+                    'assets/images/all_bg.png',
                     fit: BoxFit.contain,
                   ),
                 ),

@@ -59,7 +59,7 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
       final request = Request(
         'GET',
         Uri.parse(
-          'https://paradox-2025.vercel.app/api/v1/rank/leaderboard-stream',
+          'https://paradox-2k26.onrender.com/api/v1/rank/leaderboard-stream',
         ),
       );
 
@@ -161,7 +161,7 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
                     SizedBox(height: constraints.maxHeight * 0.08),
                     SizedBox(
                       height: constraints.maxHeight * 0.07,
-                      child: Image.asset('assets/images/paradox_text.png'),
+                      child: Image.asset('assets/images/all_bg.png'),
                     ),
                     SizedBox(height: constraints.maxHeight * 0.02),
                     Container(

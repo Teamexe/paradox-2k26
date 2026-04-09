@@ -12,7 +12,7 @@ import 'package:paradox_2k26/paradox_game/profile_screen.dart';
 import 'package:paradox_2k26/widgets/bottom_navigation.dart';
 import 'package:paradox_2k26/theme/app_theme.dart';
 import 'package:paradox_2k26/screens/online_game_screen.dart';
-import 'package:paradox_2k26/screens copy/level2_question_screen.dart';
+import 'package:paradox_2k26/paradox_game/level2_question_screen.dart';
 import 'package:paradox_2k26/screens copy/loader.dart';
 
 void main() {
@@ -33,7 +33,7 @@ class MyApp extends StatelessWidget {
       title: 'Paradox',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.darkGamingTheme,
-    home: Level2QuestionScreen(level: 2, onLevelComplete: (){}),
+    home:ParadoxMainWrapper(),
     );
   }
 }
