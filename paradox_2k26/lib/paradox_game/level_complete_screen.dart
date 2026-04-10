@@ -64,7 +64,7 @@ class _HurrayScreenState extends State<HurrayScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF0A0A12),
+      backgroundColor: AppTheme.bgDark,
       body: Stack(
         alignment: Alignment.center,
         children: [
@@ -132,13 +132,13 @@ class _HurrayScreenState extends State<HurrayScreen>
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(12),
                             border: Border.all(
-                              color: Colors.deepPurple.withOpacity(0.5),
+                              color: AppTheme.accentCyan.withOpacity(0.5),
                             ),
                           ),
                           child: const Text(
                             'BACK TO HOME',
                             style: TextStyle(
-                              color: Colors.purpleAccent,
+                              color: AppTheme.accentCyan,
                               fontSize: 14,
                               fontWeight: FontWeight.bold,
                               letterSpacing: 2,

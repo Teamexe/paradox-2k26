@@ -135,7 +135,7 @@ class _RulesScreenState extends State<RulesScreen>
                       child: SizedBox(
                         height: scale(55),
                         child: Image.asset(
-                          'assets/images/all_bg.png',
+                          'assets/images/paradox_text.png',
                           fit: BoxFit.contain,
                         ),
                       ),

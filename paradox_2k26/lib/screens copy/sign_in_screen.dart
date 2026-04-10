@@ -25,7 +25,7 @@ class _SignInScreenState extends State<SignInScreen> {
 
     try {
       final response = await http.post(
-        Uri.parse('https://paradox-2k26.onrender.com/api/v1/auth/signIn'),
+        Uri.parse('https://paradox-2025.vercel.app/api/v1/auth/signIn'),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({'email': email, 'password': password}),
       );
@@ -114,7 +114,7 @@ class _SignInScreenState extends State<SignInScreen> {
                     SizedBox(
                       height: scale(60),
                       child: Image.asset(
-                        'assets/images/all_bg.png',
+                        'assets/images/paradox_text.png',
                         fit: BoxFit.contain,
                       ),
                     ),

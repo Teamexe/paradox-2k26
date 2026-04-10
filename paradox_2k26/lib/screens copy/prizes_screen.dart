@@ -37,7 +37,7 @@ class PrizesScreen extends StatelessWidget {
                     SizedBox(
                       height: scale(60),
                       child: Image.asset(
-                        'assets/images/all_bg.png',
+                        'assets/images/paradox_text.png',
                         fit: BoxFit.contain,
                       ),
                     ),

@@ -5,14 +5,12 @@ class RulesScreen extends StatelessWidget {
   const RulesScreen({super.key});
 
   static const List<String> _rules = [
-    'Eligibility: The game is open to all the Nit Hamirpur students.',
+    'Eligibility: The game is open to all.',
     'Participation: The game must be played solo throughout all levels.',
-    'Levels: The game consists of two levels — Level 1 includes 40 image-based word guessing questions, while Level 2 contains 6 text-based riddles or puzzles.',
-    'Scoring: Each correct answer will increase the score by 100 points if done without using Hint and if you use Hint you will get +90 for that particular question',
-    'Qualification: Only the top 50 scorers from Level 1 will be eligible to move on to Level 2.',
-    'You will be given unlimited tries to solve any particular question but you have to submit the correct answer of the current question to see the next questions of any particular level ',
-    'There will be some images based questions in level 1 and you have to predict the answer from that images , it may be either in english or hindi language to guess from that image  ',
-    'The winner(1st rank)  of the level 2  will be rewarded with 10,000 cash prize',
+    'Levels: The game consists of two levels — Level 1 includes 40 image-based word guessing questions, while Level 2 contains 10 text-based riddles or puzzles.',
+    'Scoring: Each correct answer will increase the score by 50 points.',
+    'Use of Hint: Using hint will decrease the score by 10 points.',
+    'Qualification: Only the top 50 scorers from Level 1 will be eligible to move on to Level 2..',
   ];
 
   @override

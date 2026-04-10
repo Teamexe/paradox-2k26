@@ -83,7 +83,7 @@
 //       }
 //
 //       final levelResponse = await http.get(
-//         Uri.parse('https://paradox-2k26.onrender.com/api/v1/currentLevel'),
+//         Uri.parse('https://paradox-2025.vercel.app/api/v1/currentLevel'),
 //         headers: {'Authorization': 'Bearer $token'},
 //       );
 //
