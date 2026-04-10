@@ -207,7 +207,7 @@ class _AuthScreenState extends State<AuthScreen>
           ),
         ],
         image: const DecorationImage(
-          image: AssetImage('assets/images/logo.png'),
+          image: AssetImage('assets/images/logo.jpeg'),
           fit: BoxFit.contain,
         ),
       ),

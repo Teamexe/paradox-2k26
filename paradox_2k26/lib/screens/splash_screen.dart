@@ -179,7 +179,7 @@ class _SplashScreenState extends State<SplashScreen>
         color: Color(0xFF020915),
         borderRadius: BorderRadius.circular(20),
         image: DecorationImage(
-          image: const AssetImage('assets/images/logo.png'),
+          image: const AssetImage('assets/images/logo.jpeg'),
           fit: BoxFit.contain,
           colorFilter: colorFilter != null
               ? ColorFilter.mode(colorFilter, BlendMode.screen)
