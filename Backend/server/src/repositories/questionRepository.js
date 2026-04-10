@@ -57,6 +57,18 @@ class QuestionRepository extends crudRepository{
             throw new AppError("Error while fetching Question last",StatusCodes.INTERNAL_SERVER_ERROR);
         }
     }
+    async firstQues(lvl){
+        try {
+            const firstQuestion = await Questions.findOne({lvl: Number(lvl)}).sort({ id: 1 }); 
+            if (!firstQuestion) {
+                return 0;
+            }
+            return firstQuestion.id;
+        } catch (error) {
+            console.log(error);
+            throw new AppError("Error while fetching first question",StatusCodes.INTERNAL_SERVER_ERROR);
+        }
+    }
 }
 
 

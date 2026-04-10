@@ -5,7 +5,9 @@ const { StatusCodes } = require('http-status-codes');
 const {serverConfig} = require('../config');
 const bcrypt = require('bcryptjs');
 const {AuthRepository} = require('../repositories/');
+const {QuestionRepository} = require('../repositories/');
 const authRepo=new AuthRepository();
+const quesRepo=new QuestionRepository();
 
 const adminRepo=new AdminRepository();
 
@@ -71,8 +73,18 @@ async function isAuthentication(token) {
 
 async function changeLevel(data) {
     try {
-        const { Ques, Lvl, TopNumUser } = data;
-        // console.log(Ques,Lvl,TopNumUser);
+        let { Ques, Lvl, TopNumUser } = data;
+        
+        // If currQues is 0 or not provided, auto-find the first question of the target level
+        if (!Ques || Ques === 0) {
+            const firstQuesId = await quesRepo.firstQues(Lvl);
+            if (!firstQuesId) {
+                throw new AppError(`No questions found for level ${Lvl}`, StatusCodes.BAD_REQUEST);
+            }
+            Ques = firstQuesId;
+            console.log(`Auto-determined first question for level ${Lvl}: ${Ques}`);
+        }
+        
         const user = await authRepo.updateLevel(Ques, Lvl, TopNumUser);
         return user;
     } catch (error) {
