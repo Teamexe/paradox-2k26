@@ -42,13 +42,13 @@ async function signIn(req,res) {
 
 async function changeLevel(req,res) {
     try {
-        const currQues = Number(req.body.currQues) || 0; // Optional: auto-determined if 0
+        const currQues = Number(req.body.currQues);
         const currLvl = Number(req.body.currLvl);
         const topNumUser = Number(req.body.TopNumUser);
 
-        if (!Number.isInteger(currLvl) || !Number.isInteger(topNumUser) || currLvl < 1 || topNumUser < 1) {
+        if (!Number.isInteger(currQues) || !Number.isInteger(currLvl) || !Number.isInteger(topNumUser) || currQues < 0 || currLvl < 1 || topNumUser < 1) {
             return res.status(StatusCodes.BAD_REQUEST).json(
-                buildResponse(false, "currLvl and TopNumUser must be valid positive numbers", {}, "Invalid change level payload")
+                buildResponse(false, "currQues, currLvl and TopNumUser must be valid positive numbers", {}, "Invalid change level payload")
             );
         }
 

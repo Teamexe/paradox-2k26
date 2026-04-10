@@ -30,8 +30,10 @@ async function nextQues(answer,userId){
 
         if(user.currQues === lastQuestionId){
             const updatedUser = await AuthRepo.update(userId,{currQues:0,score:user.score + plusScore});
-            const response = "Level is finished";
-            return response;
+            return {
+                score: updatedUser.score - (hintUsed * 10),
+                message: "Level is finished"
+            };
         }
 
         const newQues=await quesRepo.nextQues(user.currQues,user.currLvl);
