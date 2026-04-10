@@ -338,287 +338,299 @@ class _ParadoxDashboard1State extends State<ParadoxDashboard1> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFF0A0A12),
-      body: CustomScrollView(
-        slivers: [
-          // 1. TOP BANNER SECTION
-          SliverToBoxAdapter(
-            child: Stack(
-              clipBehavior: Clip.none,
-              children: [
-                // Banner Background
-                Container(
-                  height: 200,
-                  width: double.infinity,
-                  margin: const EdgeInsets.only(
-                    left: 20,
-                    right: 20,
-                    top: 50,
-                    bottom: 20,
-                  ),
-                  padding: const EdgeInsets.all(10),
-                  decoration: BoxDecoration(
-                    image: DecorationImage(
-                      image: const AssetImage("assets/images/para.jpg"),
-                      fit: BoxFit.cover,
-                      colorFilter: ColorFilter.mode(
-                        Colors.red.withOpacity(0.4),
-                        BlendMode.dstATop,
-                      ),
-                    ),
-                    gradient: const LinearGradient(
-                      colors: [Color(0xFF1A1A2E), Color(0xFF16213E)],
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                    ),
-                    borderRadius: BorderRadius.circular(30),
-                    border: Border.all(color: Colors.white10),
-                  ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text(
-                        "Mini Games",
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 42,
-                          fontWeight: FontWeight.bold,
-                          letterSpacing: -2,
-                        ),
-                      ),
-                      Row(
-                        children: [
-                          InkWell(
-                            onTap: (){
-                              Navigator.push(context, MaterialPageRoute(builder: (context)=>ParadoxDashboard()));
-                            },
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 12,
-                                vertical: 4,
-                              ),
-                              decoration: BoxDecoration(
-                                color: const Color(0xFFBC13FE),
-                                borderRadius: BorderRadius.circular(20),
-                              ),
-                              child: const Text(
-                                "ExploreMore",
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.bold,
-                                  letterSpacing: 2,
-                                ),
-                              ),
-                            ),
-                          ),
-                          IconButton(
-                            icon: const Icon(Icons.arrow_circle_right_rounded),
-                            iconSize: 30,
-                            color: Colors.blue,
-                            onPressed: (){
-                              Navigator.push(context, MaterialPageRoute(builder: (context)=>ParadoxDashboard()));
-                            },
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-                // 2. STICKER IMAGE (Top Right)
-                Positioned(
-                  top: 50,
-                  right: 0,
-                  child: Image.asset(
-                    'assets/images/sticker.png',
-                    height: 180,
-                    width: 180,
-                    fit: BoxFit.contain,
-                    errorBuilder: (context, error, stackTrace) => Container(
-                      height: 150,
-                      width: 150,
-                      decoration: BoxDecoration(
-                        color: Colors.white10,
-                        shape: BoxShape.circle,
-                        border: Border.all(color: Colors.white24),
-                      ),
-                      child: const Icon(
-                        Icons.image,
-                        color: Colors.white24,
-                        size: 50,
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
+      body: Stack(
 
-          // 3. GRID OF GAMES (Wrapped in SliverToBoxAdapter)
-          SliverPadding(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-            sliver: SliverToBoxAdapter(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+
+      Positioned.fill(
+      child: CustomPaint(painter: _GridPainter()),
+    ),
+    //
+          CustomScrollView(
+
+          slivers: [
+            // 1. TOP BANNER SECTION
+            SliverToBoxAdapter(
+              child: Stack(
+                clipBehavior: Clip.none,
                 children: [
-                  const SizedBox(height: 10),
-                  Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      // Main Title with Stacked Neon Glow
-                      const Text(
-                        'PARADOX',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 48, // Increased size for better visual hierarchy
-                          fontWeight: FontWeight.w900, // Maximum boldness
-                          letterSpacing: 12, // Wider spacing feels more cinematic
-                          fontFamily: 'monospace',
-                          shadows: [
-                            // Stacking shadows creates a realistic, intense neon glow
-                            Shadow(color: Colors.purpleAccent, blurRadius: 10),
-                            Shadow(color: Colors.cyan, blurRadius: 20),
-                            Shadow(color: Colors.blue, blurRadius: 30),
-                            Shadow(color: Colors.purple, blurRadius: 40),
-                          ],
+
+                  Container(
+                    height: 200,
+                    width: double.infinity,
+                    margin: const EdgeInsets.only(
+                      left: 20,
+                      right: 20,
+                      top: 50,
+                      bottom: 20,
+                    ),
+                    padding: const EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                        image: const AssetImage("assets/images/para.jpg"),
+                        fit: BoxFit.cover,
+                        colorFilter: ColorFilter.mode(
+                          Colors.red.withOpacity(0.4),
+                          BlendMode.dstATop,
                         ),
                       ),
-
-                      const SizedBox(height: 16), // Slightly more breathing room
-
-                      // Subtitle framed as a futuristic, clickable-looking prompt
-                      Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
-                        decoration: BoxDecoration(
-                          color: Colors.cyan.withOpacity(0.05), // Subtle background tint
-                          borderRadius: BorderRadius.circular(30),
-                          border: Border.all(
-                            color: Colors.deepPurple.withOpacity(0.3),
-                            width: 1,
-                          ),
-                          // Optional subtle glow behind the subtitle box
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.deepPurpleAccent.withOpacity(0.1),
-                              blurRadius: 8,
-                              spreadRadius: 2,
-                            ),
-                          ],
-                        ),
-                        child: Text(
-                          "LET'S BEGIN", // All caps usually fits this aesthetic better
+                      gradient: const LinearGradient(
+                        colors: [Color(0xFF1A1A2E), Color(0xFF16213E)],
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                      ),
+                      borderRadius: BorderRadius.circular(30),
+                      border: Border.all(color: Colors.white10),
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(
+                          "Mini Games",
                           style: TextStyle(
-                            color: Colors.purple.withOpacity(0.9), // Tying it to the main glow
-                            fontSize: 14,
-                            fontWeight: FontWeight.w600,
-                            letterSpacing: 4, // Increased spacing to match the title's vibe
+                            color: Colors.white,
+                            fontSize: 42,
+                            fontWeight: FontWeight.bold,
+                            letterSpacing: -2,
                           ),
                         ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 30),
-
-                  // Welcome Card
-                  if (userName != null)
-                    Container(
-                      width: double.infinity,
-                      padding: const EdgeInsets.all(20),
-                      decoration: BoxDecoration(
-                        color: Colors.blue,
-                        borderRadius: BorderRadius.circular(16),
-                        border: Border.all(
-                          color: AppTheme.accentCyan,
-                        ),
-                      ),
-                      child: Row(
-                        children: [
-                          Container(
-                            width: 48,
-                            height: 48,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              border: Border.all(
-                                color: AppTheme.accentCyan.withOpacity(0.4),
-                              ),
-                              color: AppTheme.bgDark,
-                            ),
-                            child: const Icon(Icons.person,
-                                color: AppTheme.accentCyan, size: 24),
-                          ),
-                          const SizedBox(width: 16),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'Welcome, $userName',
-                                  style: const TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w600),
+                        Row(
+                          children: [
+                            InkWell(
+                              onTap: (){
+                                Navigator.push(context, MaterialPageRoute(builder: (context)=>ParadoxDashboard()));
+                              },
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 12,
+                                  vertical: 4,
                                 ),
-                                const SizedBox(height: 4),
-                                Text(
-                                  'Score: ${userScore ?? 0}',
+                                decoration: BoxDecoration(
+                                  color: const Color(0xFFBC13FE),
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                                child: const Text(
+                                  "ExploreMore",
                                   style: TextStyle(
-                                    color: AppTheme.accentCyan.withOpacity(0.8),
-                                    fontSize: 13,
+                                    color: Colors.white,
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.bold,
+                                    letterSpacing: 2,
                                   ),
                                 ),
-                              ],
+                              ),
                             ),
-                          ),
-                        ],
+                            IconButton(
+                              icon: const Icon(Icons.arrow_circle_right_rounded),
+                              iconSize: 30,
+                              color: Colors.blue,
+                              onPressed: (){
+                                Navigator.push(context, MaterialPageRoute(builder: (context)=>ParadoxDashboard()));
+                              },
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                  // 2. STICKER IMAGE (Top Right)
+                  Positioned(
+                    top: 50,
+                    right: 0,
+                    child: Image.asset(
+                      'assets/images/sticker.png',
+                      height: 180,
+                      width: 180,
+                      fit: BoxFit.contain,
+                      errorBuilder: (context, error, stackTrace) => Container(
+                        height: 150,
+                        width: 150,
+                        decoration: BoxDecoration(
+                          color: Colors.white10,
+                          shape: BoxShape.circle,
+                          border: Border.all(color: Colors.white24),
+                        ),
+                        child: const Icon(
+                          Icons.image,
+                          color: Colors.white24,
+                          size: 50,
+                        ),
                       ),
                     ),
-
-                  const SizedBox(height: 30),
-
-                  // Level 1 Button
-                  _buildLevelCard(
-                    level: 1,
-                    title: 'LEVEL 1',
-                    subtitle: '40 Image-Based Questions',
-                    icon: Icons.looks_one_rounded,
-                    color: Colors.deepPurpleAccent,
-                    onTap: () {
-                      if (_currentLevel > 1) {
-                        _showLevel1CompletedDialog();
-                      } else if (_currentLevel == 1) {
-                        _navigateToQuestionScreen(1);
-                      } else {
-                        _showErrorDialog("Level 1 is not yet available.");
-                      }
-                    },
-                  ),
-
-                  const SizedBox(height: 16),
-
-                  // Level 2 Button
-                  _buildLevelCard(
-                    level: 2,
-                    title: 'LEVEL 2',
-                    subtitle: '10 Text-Based Puzzles',
-                    icon: Icons.looks_two_rounded,
-                    color: const Color(0xFFBC13FE),
-                    isLocked: _currentLevel < 2,
-                    onTap: () {
-                      if (_currentLevel >= 2) {
-                        _navigateToQuestionScreen(2);
-                      } else if (_currentLevel == 1) {
-                        _showLevelLockedDialog();
-                      } else {
-                        _showErrorDialog("Level 2 is not yet available.");
-                      }
-                    },
                   ),
                 ],
               ),
             ),
-          ),
-        ],
+
+            // 3. GRID OF GAMES (Wrapped in SliverToBoxAdapter)
+            SliverPadding(
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+              sliver: SliverToBoxAdapter(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    const SizedBox(height: 10),
+                    Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        // Main Title with Stacked Neon Glow
+                        const Text(
+                          'PARADOX',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 48, // Increased size for better visual hierarchy
+                            fontWeight: FontWeight.w900, // Maximum boldness
+                            letterSpacing: 12, // Wider spacing feels more cinematic
+                            fontFamily: 'monospace',
+                            shadows: [
+                              // Stacking shadows creates a realistic, intense neon glow
+                              Shadow(color: Colors.purpleAccent, blurRadius: 10),
+                              Shadow(color: Colors.cyan, blurRadius: 20),
+                              Shadow(color: Colors.blue, blurRadius: 30),
+                              Shadow(color: Colors.purple, blurRadius: 40),
+                            ],
+                          ),
+                        ),
+
+                        const SizedBox(height: 16), // Slightly more breathing room
+
+                        // Subtitle framed as a futuristic, clickable-looking prompt
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
+                          decoration: BoxDecoration(
+                            color: Colors.cyan.withOpacity(0.05), // Subtle background tint
+                            borderRadius: BorderRadius.circular(30),
+                            border: Border.all(
+                              color: Colors.deepPurple.withOpacity(0.3),
+                              width: 1,
+                            ),
+                            // Optional subtle glow behind the subtitle box
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.deepPurpleAccent.withOpacity(0.1),
+                                blurRadius: 8,
+                                spreadRadius: 2,
+                              ),
+                            ],
+                          ),
+                          child: Text(
+                            "LET'S BEGIN", // All caps usually fits this aesthetic better
+                            style: TextStyle(
+                              color: Colors.purple.withOpacity(0.9), // Tying it to the main glow
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600,
+                              letterSpacing: 4, // Increased spacing to match the title's vibe
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 30),
+
+                    // Welcome Card
+                    if (userName != null)
+                      Container(
+                        width: double.infinity,
+                        padding: const EdgeInsets.all(20),
+                        decoration: BoxDecoration(
+                          color: Colors.blue,
+                          borderRadius: BorderRadius.circular(16),
+                          border: Border.all(
+                            color: AppTheme.accentCyan,
+                          ),
+                        ),
+                        child: Row(
+                          children: [
+                            Container(
+                              width: 48,
+                              height: 48,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                border: Border.all(
+                                  color: AppTheme.accentCyan.withOpacity(0.4),
+                                ),
+                                color: AppTheme.bgDark,
+                              ),
+                              child: const Icon(Icons.person,
+                                  color: AppTheme.accentCyan, size: 24),
+                            ),
+                            const SizedBox(width: 16),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'Welcome, $userName',
+                                    style: const TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w600),
+                                  ),
+                                  const SizedBox(height: 4),
+                                  Text(
+                                    'Score: ${userScore ?? 0}',
+                                    style: TextStyle(
+                                      color: AppTheme.accentCyan.withOpacity(0.8),
+                                      fontSize: 13,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+
+                    const SizedBox(height: 30),
+
+                    // Level 1 Button
+                    _buildLevelCard(
+                      level: 1,
+                      title: 'LEVEL 1',
+                      subtitle: '40 Image-Based Questions',
+                      icon: Icons.looks_one_rounded,
+                      color: Colors.deepPurpleAccent,
+                      onTap: () {
+                        if (_currentLevel > 1) {
+                          _showLevel1CompletedDialog();
+                        } else if (_currentLevel == 1) {
+                          _navigateToQuestionScreen(1);
+                        } else {
+                          _showErrorDialog("Level 1 is not yet available.");
+                        }
+                      },
+                    ),
+
+                    const SizedBox(height: 16),
+
+                    // Level 2 Button
+                    _buildLevelCard(
+                      level: 2,
+                      title: 'LEVEL 2',
+                      subtitle: '6 Text-Based Puzzles',
+                      icon: Icons.looks_two_rounded,
+                      color: const Color(0xFFBC13FE),
+                      isLocked: _currentLevel < 2,
+                      onTap: () {
+                        if (_currentLevel >= 2) {
+                          _navigateToQuestionScreen(2);
+                        } else if (_currentLevel == 1) {
+                          _showLevelLockedDialog();
+                        } else {
+                          _showErrorDialog("Level 2 is not yet available.");
+                        }
+                      },
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+    ]
       ),
+
     );
   }
   Widget _buildGamePoster(BuildContext context, GameLevel game) {
@@ -857,3 +869,22 @@ class _ParadoxDashboard1State extends State<ParadoxDashboard1> {
       ),
     );
   }}
+class _GridPainter extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = Colors.white.withOpacity(0.03)
+      ..strokeWidth = 0.5;
+
+    const spacing = 40.0;
+    for (double x = 0; x < size.width; x += spacing) {
+      canvas.drawLine(Offset(x, 0), Offset(x, size.height), paint);
+    }
+    for (double y = 0; y < size.height; y += spacing) {
+      canvas.drawLine(Offset(0, y), Offset(size.width, y), paint);
+    }
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
+}

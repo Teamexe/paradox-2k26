@@ -53,7 +53,7 @@ class _HurrayScreenState extends State<HurrayScreen>
 
   String _getHurrayText() {
     if (widget.completedLevel == 1) {
-      return 'LEVEL 1 COMPLETE\n\nLevel 2 starts on April 12th';
+      return 'LEVEL 1 COMPLETE\n\nLevel 2 starts soon';
     } else if (widget.completedLevel == 2) {
       return 'LEVEL 2 COMPLETE\n\nResults will be announced soon';
     } else {
